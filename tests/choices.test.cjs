@@ -65,7 +65,7 @@ for (const section of story.sections.filter(s=>['background','career','incident'
     assert.ok(option.summary && report.includes(option.summary),option.id+' has narrative prose');
     assert.doesNotMatch(report,/undefined|&#x20;|함께할 조사는 이제부터다|성별 항목은/);
     assert.ok(report.endsWith('첫 출근 날, 당신은 ERAC 조사 1팀의 문을 열었다.'));
-    assert.ok(report.includes('ID 카드를 수령하고 전용 보급품으로'));
+    assert.ok(report.includes('ID 카드를 수령할 때 전용 보급품으로'));
   }
 }
 const guideContext = {window:{}};
