@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Laika 세계관 CYOA — 직업, 힘의 기원, 특성, 신비 능력, 장비, 동료, 과거 사건, 관계와 대가를 선택해 나만의 인물을 만드는 기록 단말."
+      content="Laika CYOA — 일상을 바꾼 사건부터 라이카와의 만남까지, ERAC 조사 1팀에 합류하게 된 당신의 경위를 선택하는 이야기."
     />
     <meta name="theme-color" content="#090a0c" />
     <link
@@ -13,9 +13,9 @@
       type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090a0c'/%3E%3Cpath d='M18 16h10v23h19v9H18Z' fill='%23a4a9b2'/%3E%3C/svg%3E"
     />
-    <link rel="stylesheet" href="cyoa.css?v=2" />
-    <script src="cyoa.js?v=2" defer></script>
-    <title>인물 생성 기록 · Laika CYOA</title>
+    <link rel="stylesheet" href="cyoa.css?v=team01-1" />
+    <script src="cyoa.js?v=team01-1" defer></script>
+    <title>조사 1팀에 오기까지 · Laika CYOA</title>
   </head>
   <body>
     <a class="skip-link" href="#choice-sections">선택 항목으로 건너뛰기</a>
@@ -25,7 +25,7 @@
         <span class="terminal-brand-mark">L</span>
         <span>
           <strong>LAIKA CYOA</strong>
-          <small>ERAC / PERSONNEL CONSTRUCTION</small>
+          <small>ERAC / TEAM 01 · ORIGIN</small>
         </span>
       </a>
       <nav aria-label="보조 메뉴">
@@ -38,16 +38,16 @@
       <section class="hero character-hero" aria-labelledby="page-title">
         <div class="hero-backdrop" aria-hidden="true"></div>
         <div class="hero-copy">
-          <p class="kicker">ERAC · PERSONNEL CONSTRUCTION / CYOA</p>
-          <h1 id="page-title">당신의 기록</h1>
+          <p class="kicker">ERAC · INVESTIGATION TEAM 01 / CYOA</p>
+          <h1 id="page-title">조사 1팀에<br />오기까지</h1>
           <p class="hero-lead">
-            세계는 이미 이상해졌다.<br />
-            이제 그 안에 당신이 들어올 차례다.
+            그날의 사건이 당신을 이곳으로 이끌었다.<br />
+            문 너머에서, 새로운 동료들이 기다린다.
           </p>
           <p class="hero-description">
-            직업과 힘의 기원, 성격적 특성, 사용할 신비와 장비, 함께 움직일 사람,
-            당신을 바꾼 사건과 연구청과의 관계, 그리고 힘을 사용할 때 치르게 될 대가를 선택하십시오.
-            이 페이지는 이야기를 끝내지 않습니다. 캐릭터가 시작된 지점만 기록합니다.
+            평범했던 일상, 설명할 수 없었던 사건, 그리고 조사 1팀에서 온 연락.
+            당신이 어떤 사람이었고, 왜 라이카가 이끄는 팀에 합류했는지 선택하십시오.
+            이야기는 첫 출근 앞에서 멈춥니다. 그다음의 삶은 아직 쓰이지 않았습니다.
           </p>
           <div class="hero-notice">
             <span>CONSTRUCTION NOTICE</span>
@@ -101,15 +101,30 @@
         <p id="status-message" role="status" aria-live="polite">직업을 선택하십시오.</p>
       </section>
 
+      <p id="migration-notice" class="migration-notice" role="status" hidden></p>
+      <nav id="chapter-nav" class="chapter-nav" aria-label="합류 과정의 장면"></nav>
       <div class="play-layout">
-        <div id="choice-sections" class="choice-sections"></div>
+        <div class="story-workspace">
+          <section class="scene-intro" aria-labelledby="scene-title" tabindex="-1" id="scene-intro">
+            <p class="kicker" id="scene-number">CHAPTER 01 / 09</p>
+            <h2 id="scene-title">사건 이전의 당신</h2>
+            <p id="scene-text">사건 이전의 삶부터 돌아봅니다.</p>
+          </section>
+          <div id="choice-sections" class="choice-sections"></div>
+          <div class="chapter-controls">
+            <button id="chapter-prev" class="secondary-action" type="button">이전 장면</button>
+            <p id="chapter-hint" aria-live="polite"></p>
+            <button id="chapter-next" class="secondary-action" type="button">다음 장면</button>
+          </div>
+          <p class="chapter-help">위 장면 번호로 언제든 돌아갈 수 있습니다. 구성점이 부족하면 마지막 ‘대가’를 먼저 정해도 됩니다.</p>
+        </div>
 
         <aside class="selection-dossier" aria-labelledby="selection-title">
           <div class="dossier-topline">
-            <p class="kicker">LIVE PERSONNEL FILE</p>
+            <p class="kicker">TEAM 01 / INTAKE NOTES</p>
             <span id="selection-count">0 SELECTED</span>
           </div>
-          <h2 id="selection-title">현재 캐릭터</h2>
+          <h2 id="selection-title">당신의 합류 기록</h2>
           <div class="mini-identity" id="mini-identity">
             <strong>미등록 인물</strong>
             <span>기록 작성 중</span>
@@ -118,7 +133,7 @@
             <p class="empty-state">아직 선택된 항목이 없습니다.</p>
           </div>
           <div class="dossier-actions">
-            <button id="copy-report" class="secondary-action" type="button">캐릭터 시트 복사</button>
+            <button id="copy-report" class="secondary-action" type="button">합류 기록 복사</button>
             <button id="reset-side" class="secondary-action" type="button">선택 초기화</button>
           </div>
         </aside>
@@ -127,8 +142,8 @@
       <section id="result-panel" class="result-panel character-result" aria-labelledby="result-title">
         <div class="result-heading">
           <div>
-            <p class="kicker">PERSONNEL OUTPUT</p>
-            <h2 id="result-title">개인 기록 카드</h2>
+            <p class="kicker">INVESTIGATION TEAM 01 / NEW ARRIVAL</p>
+            <h2 id="result-title">조사 1팀 합류 기록</h2>
           </div>
           <span id="result-state">작성 중</span>
         </div>
@@ -142,7 +157,7 @@
             <div class="sheet-seal" aria-hidden="true">ERAC<br />FILE</div>
           </div>
           <p id="result-summary">
-            마지막 항목인 대가까지 선택하면 지금까지의 선택이 하나의 캐릭터 기록으로 정리됩니다.
+            각 장면과 마지막 대가를 선택하면, 조사 1팀에 오게 된 당신의 이야기가 완성됩니다.
           </p>
           <div id="result-records" class="result-records"></div>
           <ul id="result-notes"></ul>
@@ -151,8 +166,8 @@
     </main>
 
     <footer>
-      <span>ERAC / PERSONNEL CONSTRUCTION TERMINAL</span>
-      <span>NO ENDING · CHARACTER ORIGIN ONLY</span>
+      <span>ERAC / INVESTIGATION TEAM 01</span>
+      <span>YOUR STORY STARTS HERE</span>
     </footer>
 
     <template id="choice-template">

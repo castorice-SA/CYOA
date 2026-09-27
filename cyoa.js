@@ -1,7 +1,8 @@
 (() => {
   "use strict";
 
-  const STORAGE_KEY = "laika-standalone-cyoa-v1";
+  const STORAGE_KEY = "laika-team01-cyoa-v2";
+  const LEGACY_KEY = "laika-standalone-cyoa-v1";
   const IDENTITY_KEY = "laika-standalone-identity-v1";
   const BASE_POINTS = 8;
 
@@ -104,23 +105,64 @@
       ]
     },
     {
-      id: "companion",
-      number: "06",
-      title: "동료",
-      description: "누구와 함께 움직이는지는 능력만큼 큰 선택입니다. 이름이 아니라 역할을 고릅니다.",
-      mode: "single",
-      min: 1,
-      max: 1,
-      rule: "1개 선택 · 비용 없음",
-      choices: [
-        { id: "companion_record", code: "PARTNER / RECORD", title: "기록 분석가", body: "당신의 추론을 그대로 믿지 않고 원문과 수치를 다시 확인한다. 틀렸을 때 가장 먼저 말해주는 사람.", cost: 0, effect: "검증 파트너", tags: ["analysis"] },
-        { id: "companion_guard", code: "PARTNER / GUARD", title: "현장 보호자", body: "당신이 관측하는 동안 출입구와 퇴로를 확보한다. 위험한 판단에 몸으로 반대할 수도 있다.", cost: 0, effect: "생존 파트너", tags: ["field"] },
-        { id: "companion_medic", code: "PARTNER / MEDIC", title: "의료 담당", body: "부상과 인지 이상을 가장 먼저 알아차린다. 조사 성공보다 살아 돌아오는 일을 우선한다.", cost: 0, effect: "회복 파트너", tags: ["care"] },
-        { id: "companion_liaison", code: "PARTNER / LIAISON", title: "연락관", body: "허가와 외부 협력, 구조 요청을 연결한다. 당신의 계획을 기관이 이해할 언어로 바꾼다.", cost: 0, effect: "조정 파트너", tags: ["procedure"] },
-        { id: "companion_anomaly", code: "PARTNER / ANOMALOUS", title: "비적대 공상체", body: "인간과 같은 방식으로 세계를 보지 않는 동행자. 도움이 되지만, 인간 사회의 기준으로는 설명하기 어렵다.", cost: 0, effect: "이질적 동행", tags: ["imagination"] },
-        { id: "companion_solo", code: "PARTNER / SOLO", title: "단독 활동", body: "고정 동료 없이 임무마다 협력자를 바꾼다. 자유롭지만 당신의 오판을 즉시 막아줄 사람이 없다.", cost: 0, effect: "독립 운용", tags: ["solo"] }
-      ]
+  "id": "companion",
+  "title": "조사 1팀과의 첫 접점",
+  "description": "그 사건 이후, 당신의 이야기는 어떤 경로로 조사 1팀에 닿았습니까?",
+  "mode": "single",
+  "min": 1,
+  "max": 1,
+  "rule": "1개 선택 · 비용 없음",
+  "choices": [
+    {
+      "id": "contact_laika",
+      "title": "면담실의 라이카",
+      "body": "당신의 진술을 다시 듣고 싶다는 연락이 왔다. 면담실에서 라이카는 따뜻한 잔을 내밀고, 기록에서 빠진 대목을 물었다.",
+      "effect": "팀장과 직접 면담",
+      "code": "CONTACT / 01",
+      "cost": 0
     },
+    {
+      "id": "contact_field",
+      "title": "현장에서 만난 조사요원",
+      "body": "현장에 남아 있던 당신은 조사 1팀의 요원과 마주쳤다. 당신이 알려 준 단서가 조사에 도움이 되었고, 사건 뒤에도 연락이 이어졌다.",
+      "effect": "현장 협력",
+      "code": "CONTACT / 02",
+      "cost": 0
+    },
+    {
+      "id": "contact_record",
+      "title": "당신의 기록을 읽은 분석관",
+      "body": "아무도 읽지 않을 줄 알았던 보고서에 답장이 왔다. 조사 1팀의 분석관은 당신의 관측을 직접 확인하고 싶어 했다.",
+      "effect": "기록을 통한 연결",
+      "code": "CONTACT / 03",
+      "cost": 0
+    },
+    {
+      "id": "contact_medical",
+      "title": "치료실에서 이어진 대화",
+      "body": "사건 이후 치료를 받던 중, 연구청 의료진에게 이상현상의 흔적을 설명했다. 당신의 동의를 얻은 의료진이 조사 1팀에 면담을 연결했다.",
+      "effect": "회복 이후의 접촉",
+      "code": "CONTACT / 04",
+      "cost": 0
+    },
+    {
+      "id": "contact_liaison",
+      "title": "연구청에서 온 연락",
+      "body": "당신의 이력을 검토한 연구청 연락관이 조사 1팀의 협력 요청을 전달했다. 조건을 듣고 판단할 시간은 당신에게 주어졌다.",
+      "effect": "공식 연락",
+      "code": "CONTACT / 05",
+      "cost": 0
+    },
+    {
+      "id": "contact_tip",
+      "title": "당신이 먼저 보낸 제보",
+      "body": "다른 사람을 기다리는 대신 직접 자료를 보냈다. 며칠 뒤 조사 1팀에서 답장이 왔다. 그들이 확인하고 싶은 것은 자료를 모은 당신이었다.",
+      "effect": "자발적 접촉",
+      "code": "CONTACT / 06",
+      "cost": 0
+    }
+  ]
+},
     {
       id: "incident",
       number: "07",
@@ -140,23 +182,64 @@
       ]
     },
     {
-      id: "relationship",
-      number: "08",
-      title: "ERAC와의 관계",
-      description: "황실 이상현상 연구청은 이 세계의 유일한 선택지가 아닙니다. 당신이 기관과 어떤 거리에서 살아가는지 정합니다.",
-      mode: "single",
-      min: 1,
-      max: 1,
-      rule: "1개 선택 · 비용 없음",
-      choices: [
-        { id: "relation_agent", code: "ERAC / AGENT", title: "정식 조사요원", body: "연구청의 권한과 장비를 사용하며 그 결과에 대한 보고 책임도 진다.", cost: 0, effect: "내부 인력", tags: ["procedure"] },
-        { id: "relation_researcher", code: "ERAC / CONTRACT", title: "외부 계약 연구원", body: "특정 분야의 전문성 때문에 필요할 때 호출된다. 조직의 규율과 개인의 방식 사이에 거리가 있다.", cost: 0, effect: "전문 협력", tags: ["analysis"] },
-        { id: "relation_survivor", code: "ERAC / PROTECTED", title: "보호 대상 출신", body: "과거 ERAC의 보호와 감시를 함께 받았다. 지금도 연구청을 완전히 믿지도, 완전히 떠나지도 못한다.", cost: 0, effect: "복합적 신뢰", tags: ["people"] },
-        { id: "relation_watch", code: "ERAC / WATCHLIST", title: "감시 대상", body: "당신의 힘이나 기원 때문에 정기적으로 상태를 보고해야 한다. 적은 아니지만 완전한 자유도 없다.", cost: 0, effect: "조건부 자유", tags: ["otherworld"] },
-        { id: "relation_informant", code: "ERAC / INFORMANT", title: "비공식 정보원", body: "현장 소문과 비공개 경로를 연구청에 넘긴다. 기록에는 당신의 이름보다 코드가 더 자주 남는다.", cost: 0, effect: "그림자 협력", tags: ["information"] },
-        { id: "relation_independent", code: "ERAC / INDEPENDENT", title: "독립 활동자", body: "ERAC의 명령 체계 밖에서 움직인다. 필요할 때 협력하지만 조사 목적과 윤리는 스스로 정한다.", cost: 0, effect: "기관 외부", tags: ["solo"] }
-      ]
+  "id": "relationship",
+  "title": "그 제안을 받아들인 이유",
+  "description": "조사 1팀과 함께 일할 기회가 생겼습니다. 당신은 왜 이 팀에 들어가기로 했습니까?",
+  "mode": "single",
+  "min": 1,
+  "max": 1,
+  "rule": "1개 선택 · 비용 없음",
+  "choices": [
+    {
+      "id": "join_answer",
+      "title": "남겨진 의문을 쫓기 위해",
+      "body": "그 사건은 끝났다고 기록됐지만, 당신에게는 아직 설명되지 않은 부분이 있다. 조사 1팀에서라면 그 질문을 계속할 수 있다.",
+      "effect": "미해결 의문",
+      "code": "JOIN / 01",
+      "cost": 0
     },
+    {
+      "id": "join_protect",
+      "title": "다음 사람은 구하기 위해",
+      "body": "당신이 겪은 일을 다른 사람도 겪을 수 있다. 이제는 사건 바깥에서 기다리기보다, 대응하는 쪽에 서기로 했다.",
+      "effect": "구조와 보호",
+      "code": "JOIN / 02",
+      "cost": 0
+    },
+    {
+      "id": "join_research",
+      "title": "혼자서는 닿지 못할 진실 때문에",
+      "body": "당신의 지식과 능력에는 한계가 있다. 동료의 검증과 연구청의 자료가 필요했고, 그만큼 당신의 관측도 팀에 내놓기로 했다.",
+      "effect": "공동 조사",
+      "code": "JOIN / 03",
+      "cost": 0
+    },
+    {
+      "id": "join_return",
+      "title": "구조받은 뒤 스스로 지원",
+      "body": "한때 조사 대상이었던 당신은 회복한 뒤 다시 문을 두드렸다. 빚을 갚으라는 요구 때문이 아니라, 이번에는 누군가를 데리고 돌아오고 싶어서다.",
+      "effect": "구조 대상에서 팀원으로",
+      "code": "JOIN / 04",
+      "cost": 0
+    },
+    {
+      "id": "join_trust",
+      "title": "당신의 말을 들어준 사람 때문에",
+      "body": "쉽게 설명되지 않는 진술 앞에서도 라이카는 자리를 뜨지 않았다. 모든 답을 믿는 것은 아니지만, 질문을 함께 견딜 사람은 믿어 보기로 했다.",
+      "effect": "면담에서 시작된 신뢰",
+      "code": "JOIN / 05",
+      "cost": 0
+    },
+    {
+      "id": "join_place",
+      "title": "힘을 숨기지 않아도 될 자리를 찾아",
+      "body": "혼자 힘을 감추며 버티는 데 지쳤다. 위험과 한계를 팀에 알리고, 그것까지 고려하며 함께 일할 자리를 선택했다.",
+      "effect": "함께 감당할 동료",
+      "code": "JOIN / 06",
+      "cost": 0
+    }
+  ]
+},
     {
       id: "price",
       number: "09",
@@ -177,6 +260,30 @@
     }
   ];
 
+  // The story ends at entry into Team 01; it does not resolve the earlier incident.
+  const chapterOrder = ['career', 'incident', 'origin', 'traits', 'mystery', 'companion', 'relationship', 'equipment', 'price'];
+  sections.sort((a, b) => chapterOrder.indexOf(a.id) - chapterOrder.indexOf(b.id));
+  const chapterCopy = {
+    career: ['사건 이전의 당신', '조사 1팀의 문을 두드리기 전, 당신에게도 익숙한 일상이 있었습니다. 그때 당신은 무엇으로 살아갔습니까?'],
+    incident: ['일상을 끊어 놓은 사건', '그날 이후, 이상현상은 남의 이야기가 아니게 되었습니다. 당신을 연구청의 시야에 들어오게 한 사건을 고르십시오.'],
+    origin: ['당신에게 깃든 힘', '사건을 설명하려면 당신이 가진 힘부터 이야기해야 합니다. 사건 전부터 지녔을 수도, 사건을 겪으며 얻었을 수도 있습니다.'],
+    traits: ['그때 드러난 당신의 모습', '위기 앞에서 당신은 어떤 사람이었습니까? 두 가지 태도를 골라 그날의 당신을 남기십시오.'],
+    mystery: ['조사 1팀이 주목한 능력', '당신이 해낼 수 있는 일은 무엇입니까? 함께 조사하게 될 동료들에게 보여 줄 신비를 고르십시오.'],
+    equipment: ['첫 출근에 챙긴 것', '합류를 결정한 뒤, 당신은 현장에 가져갈 장비를 준비합니다. 앞으로 동료들과 돌아오기 위해 필요한 것을 고르십시오.'],
+    price: ['합류 전에 밝혀야 할 대가', '팀에 들어가도 힘의 대가는 사라지지 않습니다. 앞으로 함께 일할 사람들에게 알려 두어야 할 한계를 고르십시오.']
+  };
+  sections.forEach((section, index) => {
+    section.number = String(index + 1).padStart(2, '0');
+    if (chapterCopy[section.id]) [section.title, section.description] = chapterCopy[section.id];
+  });
+  const routes = sections.find(section => section.id === 'relationship').choices;
+  Object.assign(routes.find(choice => choice.id === 'join_return'), {
+    requires: () => isSelected('incident_rescued'), lockText: '사건에서 「ERAC 조사에 의해 구조됨」을 선택하면 열립니다.'
+  });
+  Object.assign(routes.find(choice => choice.id === 'join_trust'), {
+    requires: () => isSelected('contact_laika'), lockText: '첫 접점에서 「면담실의 라이카」를 선택하면 열립니다.'
+  });
+
   const choiceMap = new Map();
   sections.forEach(section => {
     section.choices.forEach(choice => {
@@ -185,7 +292,7 @@
     });
   });
 
-  const state = { selected: new Set() };
+  const state = { selected: new Set(), chapter: 0 };
   const identity = { name: "", codename: "", age: "" };
 
   const els = {
@@ -398,9 +505,9 @@
       const need = Math.max(0, (next.min || 0) - currentCount);
       els.status.textContent = need > 1
         ? `${next.title}: ${need}개를 더 선택하십시오.`
-        : `${next.title}을(를) 선택하십시오.`;
+        : `${next.title}: 선택을 완료해 주세요.`;
     } else {
-      els.status.textContent = "캐릭터 기록이 완성되었습니다. 아래 개인 기록 카드를 확인하십시오.";
+      els.status.textContent = "조사 1팀 합류 기록이 완성되었습니다. 당신의 첫 출근을 확인하십시오.";
     }
   }
 
@@ -455,14 +562,16 @@
   }
 
   function characterSummary() {
-    const career = firstTitle("career");
-    const origin = firstTitle("origin");
-    const relation = firstTitle("relationship");
-    const abilities = titles("mystery").join(", ");
-    const incident = firstTitle("incident");
-    const price = firstTitle("price");
-
-    return `${displayName()}은(는) ${relation}의 위치에서 살아가는 ${career}이다. ${origin}의 방식으로 신비한 힘을 얻었고, 핵심 수단으로 ${abilities}을(를) 사용한다. ${incident}을(를) 지나 현재의 인물이 되었으며, 그 힘에는 ‘${price}’라는 대가가 따라붙는다. 이 기록은 결말이 아니라 시작점이다.`;
+    const contact = selectedInSection('companion')[0];
+    const reason = selectedInSection('relationship')[0];
+    return [
+      `이름은 ${displayName()}. 조사 1팀에 오기 전에는 ${firstTitle('career')} 일을 했다. 일상을 바꾼 것은 ‘${firstTitle('incident')}’ 사건이었다.`,
+      `힘의 기원은 ${firstTitle('origin')}. 당시의 행동에서는 ${titles('traits').join(', ')} 같은 태도가 드러났다. 팀에는 ${titles('mystery').join(', ')} 능력을 활용할 수 있다고 알렸다.`,
+      contact.body,
+      reason.body,
+      `합류를 결정한 뒤 ${titles('equipment').join(', ')} 장비를 챙겼다. 동료들에게는 ‘${firstTitle('price')}’라는 대가도 알렸다. 힘의 한계를 숨기지 않는 것이 함께 일하기 위한 첫 약속이었다.`,
+      `첫 출근 날, ${displayName()}의 이름이 ERAC 조사 1팀의 새 합류 기록에 남았다. 팀장 라이카와 함께할 조사는 이제부터다.`
+    ].join('\n\n');
   }
 
   function renderResult() {
@@ -471,7 +580,7 @@
     if (!characterComplete()) {
       els.resultState.textContent = "작성 중";
       els.resultState.classList.remove("result-state-ready");
-      els.resultSummary.textContent = "마지막 항목인 대가까지 선택하면 지금까지의 선택이 하나의 캐릭터 기록으로 정리됩니다.";
+      els.resultSummary.textContent = "각 장면과 마지막 대가를 선택하면, 조사 1팀에 오게 된 당신의 이야기가 완성됩니다.";
       els.resultRecords.innerHTML = "";
       els.resultNotes.innerHTML = "";
       return;
@@ -493,15 +602,15 @@
 
     const notes = [
       `잔여 구성점: ${pointsRemaining()} / 총 ${totalPoints()}.`,
-      "이 기록은 캐릭터의 출발 조건만 정리하며, 이후 사건의 결말이나 생존 여부를 결정하지 않습니다.",
-      "능력의 세부 경지·수치·숨겨진 해금 조건은 별도 확장 영역으로 남겨 둡니다."
+      "소속: 황실 이상현상 연구청 · 조사 1팀 / 팀장: 라이카.",
+      "기록은 팀에 합류한 시점까지입니다. 과거 사건의 진상과 앞으로의 조사는 아직 열려 있습니다."
     ];
     els.resultNotes.innerHTML = notes.map(note => `<li>${note}</li>`).join("");
   }
 
   function buildReportText() {
     const lines = [
-      "LAIKA / ERAC 인물 생성 기록",
+      "LAIKA / ERAC 조사 1팀 합류 기록",
       "==========================",
       `표시명: ${displayName()}`,
       identity.name ? `이름: ${identity.name}` : "이름: 미등록",
@@ -520,12 +629,12 @@
     });
 
     if (characterComplete()) {
-      lines.push("캐릭터 요약");
+      lines.push("조사 1팀에 오기까지");
       lines.push(characterSummary());
       lines.push("");
     }
 
-    lines.push("※ 이 기록은 캐릭터의 시작점이며 엔딩을 결정하지 않습니다.");
+    lines.push("※ 첫 출근까지의 기록입니다. 이후 조사의 결말은 결정하지 않습니다.");
     return lines.join("\n");
   }
 
@@ -547,7 +656,7 @@
       els.copy.textContent = "복사됨";
     }
     window.setTimeout(() => {
-      els.copy.textContent = "캐릭터 시트 복사";
+      els.copy.textContent = "합류 기록 복사";
     }, 1500);
   }
 
@@ -571,7 +680,9 @@
 
   function restore() {
     try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const currentSave = localStorage.getItem(STORAGE_KEY);
+      const legacySave = currentSave === null ? localStorage.getItem(LEGACY_KEY) : null;
+      const saved = JSON.parse(currentSave || legacySave || "[]");
       if (Array.isArray(saved)) {
         saved.filter(id => choiceMap.has(id)).forEach(id => state.selected.add(id));
       }
@@ -584,6 +695,11 @@
       els.codename.value = identity.codename;
       els.age.value = identity.age;
       sanitizeSelections();
+      if (legacySave && state.selected.size) {
+        const notice = document.querySelector('#migration-notice');
+        notice.hidden = false;
+        notice.textContent = '이전 기록의 직업·사건·능력·장비·대가를 불러왔습니다. 첫 접점과 합류 이유는 새로 선택해 주세요.';
+      }
     } catch {
       state.selected.clear();
     }
@@ -607,13 +723,14 @@
     els.codename.value = "";
     els.age.value = "";
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(STORAGE_KEY, "[]");
       localStorage.removeItem(IDENTITY_KEY);
     } catch {
       // Ignore storage failures.
     }
+    document.querySelector('#migration-notice').hidden = true;
     render();
-    document.querySelector("#choice-sections").scrollIntoView({ behavior: "smooth", block: "start" });
+    goToChapter(0);
   }
 
   function render() {
@@ -621,7 +738,74 @@
     renderStatus();
     renderSummary();
     renderResult();
+    renderChapter();
   }
+
+  function sceneText(id) {
+    const career = firstTitle('career') || '아직 기록되지 않은 직업';
+    const incident = firstTitle('incident');
+    const contact = firstTitle('companion');
+    const prelude = incident ? `‘${incident}’ 이후, 당신의 삶에는 설명해야 할 것이 남았습니다. ` : '';
+    const scenes = {
+      career: '문패에는 황실 이상현상 연구청, 조사 1팀이라고 적혀 있습니다. 하지만 당신의 이야기는 이 문 앞에서 시작되지 않습니다. 그보다 전, 익숙했던 일상으로 돌아갑니다.',
+      incident: `당시 당신의 직업은 ${career}. 익숙한 지식과 경험만으로는 설명할 수 없는 일이 벌어졌습니다. 그 사건이 연구청과 당신을 잇는 첫 실마리가 됩니다.`,
+      origin: prelude + '당신의 힘 역시 그중 하나였습니다. 처음 힘을 얻었던 순간을 떠올립니다. 사건 이전의 일이든, 바로 그 사건 속의 일이든 괜찮습니다.',
+      traits: prelude + '진술서에는 사건의 경과가 적혔지만, 그 순간 당신이 어떤 사람이었는지까지 담기지는 않았습니다. 당신의 행동을 설명하는 두 가지 태도를 남깁니다.',
+      mystery: `직업은 ${career}, 힘의 기원은 ${firstTitle('origin') || '미정'}. 조사 1팀이 묻는 것은 힘의 크기만이 아닙니다. 그 힘으로 무엇을 알아내고, 누구를 도울 수 있는지가 중요합니다.`,
+      companion: prelude + '어떤 만남은 현장에서, 어떤 만남은 한 장의 보고서에서 시작됩니다. 조사 1팀과 당신의 이야기가 처음 겹친 순간을 고릅니다.',
+      relationship: contact ? `첫 접점은 ‘${contact}’였습니다. 연락과 확인을 거친 뒤, 함께 일해 보자는 제안이 도착했습니다. 문을 통과할지 결정하는 것은 당신입니다.` : '조사 1팀과 함께 일할 기회가 생겼습니다. 먼저 첫 접점을 정하면 그 만남에 이어지는 합류 이유를 선택할 수 있습니다.',
+      equipment: `‘${firstTitle('relationship') || '아직 정하지 않은 이유'}’. 마음을 정한 뒤에는 실제 준비가 남았습니다. 첫 출근을 앞두고 현장에 가져갈 장비를 확인합니다.`,
+      price: '입을 다물고 지나갈 수도 있는 질문이 하나 남았습니다. 힘을 쓰고 난 뒤, 당신에게는 무엇이 남습니까? 앞으로 곁에 설 동료들에게 그 대가를 알립니다.'
+    };
+    return scenes[id];
+  }
+
+  function goToChapter(index) {
+    state.chapter = Math.max(0, Math.min(sections.length - 1, index));
+    renderChapter();
+    const scene = document.querySelector('#scene-intro');
+    scene.focus({ preventScroll: true });
+    scene.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderChapter() {
+    const section = sections[state.chapter];
+    const nav = document.querySelector('#chapter-nav');
+    if (!nav.children.length) sections.forEach((chapter, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.addEventListener('click', () => goToChapter(index));
+      nav.append(button);
+    });
+    sections.forEach((chapter, index) => {
+      const button = nav.children[index];
+      button.textContent = `${chapter.number} ${chapter.title}${sectionComplete(chapter) ? ' ✓' : ''}`;
+      if (index === state.chapter) button.setAttribute('aria-current', 'step');
+      else button.removeAttribute('aria-current');
+      document.querySelector(`[data-section="${chapter.id}"]`).hidden = index !== state.chapter;
+    });
+    document.querySelector('#scene-number').textContent = `CHAPTER ${section.number} / 09`;
+    document.querySelector('#scene-title').textContent = section.title;
+    document.querySelector('#scene-text').textContent = sceneText(section.id);
+    document.querySelector('#chapter-prev').disabled = state.chapter === 0;
+    const last = state.chapter === sections.length - 1;
+    document.querySelector('#chapter-next').textContent = last ? '합류 기록 보기' : '다음 장면';
+    document.querySelector('#chapter-next').disabled = last ? !characterComplete() : !sectionComplete(section);
+    document.querySelector('#chapter-hint').textContent = last
+      ? (characterComplete() ? '첫 출근을 앞둔 당신의 기록이 준비되었습니다.' : '모든 장면을 선택하고 구성점을 확인해 주세요.')
+      : (sectionComplete(section) ? '선택은 나중에 바꿀 수 있습니다.' : `이 장면에서 ${section.min}개를 선택해 주세요.`);
+  }
+
+  document.querySelector('#chapter-prev').addEventListener('click', () => goToChapter(state.chapter - 1));
+  document.querySelector('#chapter-next').addEventListener('click', () => {
+    if (state.chapter < sections.length - 1) goToChapter(state.chapter + 1);
+    else {
+      const result = document.querySelector('#result-title');
+      result.setAttribute('tabindex', '-1');
+      result.focus({ preventScroll: true });
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 
   [els.name, els.codename, els.age].forEach(input => {
     input.addEventListener("input", syncIdentity);
