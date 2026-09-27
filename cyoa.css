@@ -25,6 +25,10 @@
 .chapter-nav button { padding: .8rem 1rem; border: 1px solid var(--line); background: #11161d; color: var(--muted); cursor: pointer; font-size: .75rem; }
 .chapter-nav button[aria-current="step"] { border-color: var(--wine); color: var(--text); background: #30232e; }
 .story-workspace { min-width: 0; }
+.recruitment-guide { padding: 1.3rem; }
+.recruitment-guide h2 { font: 500 1.4rem/1.6 var(--serif); margin: .8rem 0; }
+.recruitment-guide > p:not(.kicker) { font-size: .85rem; line-height: 1.85; color: var(--muted); }
+.recruitment-guide .start-story { display: block; margin-top: 1.2rem; padding: 1rem .5rem; text-align: center; text-decoration: none; border: 1px solid var(--line-strong); }
 .scene-intro { padding: clamp(1.3rem, 3vw, 2.4rem); border-left: 2px solid var(--wine); background: linear-gradient(110deg, #231d28, #11161d); margin-bottom: 2rem; }
 .scene-intro h2 { font-size: clamp(1.35rem, 3vw, 2rem); font-weight: 500; }
 .scene-intro p:last-child { margin: 0; line-height: 1.9; color: #c6c0c8; overflow-wrap: anywhere; }
@@ -36,7 +40,7 @@
 .migration-notice { padding: 1rem; border: 1px solid var(--wine); }
 #result-summary { white-space: pre-line; overflow-wrap: anywhere; }
 .character-sheet-heading > div:first-child { min-width: 0; }
-#sheet-codename { overflow-wrap: anywhere; }
+#sheet-subject { overflow-wrap: anywhere; }
 @media (max-width: 720px) {
   .chapter-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .chapter-nav button { text-align: left; line-height: 1.5; }
@@ -48,7 +52,7 @@
 [hidden] { display: none !important; }
 html { scroll-behavior: smooth; scroll-padding-top: 8rem; }
 body {
-  min-width: 320px;
+  min-width: 0;
   margin: 0;
   min-height: 100vh;
   color: var(--text);
@@ -432,8 +436,10 @@ main {
 }
 .choice-body {
   color: #adb2bd;
-  font-size: .8rem;
-  line-height: 1.8;
+  font-size: .92rem;
+  line-height: 1.9;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
   word-break: keep-all;
 }
 .choice-footer {
@@ -759,55 +765,21 @@ footer {
 .character-hero .hero-lead {
   max-width: 680px;
 }
-.identity-card {
+.recruitment-card {
   align-self: center;
 }
-.identity-fields {
-  display: grid;
-  gap: .95rem;
-  padding: 1.2rem;
-}
-.identity-fields .kicker {
-  margin-bottom: .15rem;
-}
-.identity-fields label {
-  display: grid;
-  gap: .45rem;
-}
-.identity-fields label > span {
-  color: var(--muted);
-  font-size: .67rem;
-}
-.identity-fields input {
-  width: 100%;
-  min-height: 2.8rem;
-  padding: .7rem .8rem;
-  border: 1px solid var(--line);
-  border-radius: 0;
-  outline: 0;
-  background: #090d14b8;
-  color: var(--text);
-  font: .78rem var(--mono);
-}
-.identity-fields input:focus {
-  border-color: #9b7e8c;
-  box-shadow: inset 2px 0 #765461;
-}
-.identity-fields input::placeholder {
-  color: #666d79;
-}
-.mini-identity {
+.mini-profile {
   display: grid;
   gap: .35rem;
   padding: 1rem 1.2rem;
   border-bottom: 1px solid var(--line);
   background: #0b101775;
 }
-.mini-identity strong {
+.mini-profile strong {
   color: #ddd3da;
   font: 500 1rem var(--serif);
 }
-.mini-identity span {
+.mini-profile span {
   color: #858d99;
   font: .58rem var(--mono);
   letter-spacing: .06em;
@@ -833,13 +805,13 @@ footer {
   font: .56rem var(--mono);
   letter-spacing: .15em;
 }
-#sheet-codename {
+#sheet-subject {
   display: block;
   color: #e2d9de;
   font: 400 clamp(2.3rem, 6vw, 5rem)/.95 var(--serif);
   letter-spacing: .04em;
 }
-#sheet-name {
+#sheet-profile {
   margin: .75rem 0 0;
   color: #aeb3bd;
   font-size: .78rem;

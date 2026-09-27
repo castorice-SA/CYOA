@@ -13,8 +13,9 @@
       type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090a0c'/%3E%3Cpath d='M18 16h10v23h19v9H18Z' fill='%23a4a9b2'/%3E%3C/svg%3E"
     />
-    <link rel="stylesheet" href="cyoa.css?v=team01-1" />
-    <script src="cyoa.js?v=team01-1" defer></script>
+    <link rel="stylesheet" href="cyoa.css?v=team01-2" />
+    <script src="cyoa-data.js?v=team01-2" defer></script>
+    <script src="cyoa.js?v=team01-2" defer></script>
     <title>조사 1팀에 오기까지 · Laika CYOA</title>
   </head>
   <body>
@@ -58,7 +59,7 @@
           </div>
         </div>
 
-        <aside class="hero-card identity-card" aria-labelledby="identity-title">
+        <aside class="hero-card recruitment-card" aria-labelledby="guide-title">
           <div class="seal-frame">
             <img
               src="assets/erac/erac-logo-extranormal-v2.png"
@@ -68,20 +69,16 @@
               decoding="async"
             />
           </div>
-          <div class="identity-fields">
-            <p class="kicker" id="identity-title">PERSONAL DATA</p>
-            <label>
-              <span>이름</span>
-              <input id="character-name" type="text" maxlength="30" placeholder="미등록" autocomplete="off" />
-            </label>
-            <label>
-              <span>코드네임</span>
-              <input id="character-codename" type="text" maxlength="24" placeholder="선택 사항" autocomplete="off" />
-            </label>
-            <label>
-              <span>나이</span>
-              <input id="character-age" type="number" min="18" max="120" inputmode="numeric" placeholder="18+" />
-            </label>
+          <div class="recruitment-guide">
+            <p class="kicker" id="guide-title">YOUR PLACE IN TEAM 01</p>
+            <h2>한 사람의 삶이<br />한 팀에 닿기까지</h2>
+            <p>나이와 성별, 살아온 환경부터 시작합니다. 사건과 만남을 따라가며, 당신이 이 팀의 문을 열게 된 이유를 남기십시오.</p>
+            <dl>
+              <div><dt>장면</dt><dd id="chapter-total">13</dd></div>
+              <div><dt>선택지</dt><dd id="choice-total">109</dd></div>
+              <div><dt>구성점</dt><dd>기본 8 + 대가</dd></div>
+            </dl>
+            <a class="secondary-action start-story" href="#scene-intro">당신의 이야기 시작하기 ↓</a>
           </div>
         </aside>
       </section>
@@ -98,7 +95,7 @@
         <div class="status-progress" aria-hidden="true">
           <span id="progress-bar"></span>
         </div>
-        <p id="status-message" role="status" aria-live="polite">직업을 선택하십시오.</p>
+        <p id="status-message" role="status" aria-live="polite">당신의 나이를 선택하십시오.</p>
       </section>
 
       <p id="migration-notice" class="migration-notice" role="status" hidden></p>
@@ -106,9 +103,9 @@
       <div class="play-layout">
         <div class="story-workspace">
           <section class="scene-intro" aria-labelledby="scene-title" tabindex="-1" id="scene-intro">
-            <p class="kicker" id="scene-number">CHAPTER 01 / 09</p>
-            <h2 id="scene-title">사건 이전의 당신</h2>
-            <p id="scene-text">사건 이전의 삶부터 돌아봅니다.</p>
+            <p class="kicker" id="scene-number">CHAPTER 01 / 13</p>
+            <h2 id="scene-title">당신의 나이</h2>
+            <p id="scene-text">조사 1팀의 문 앞에 선 당신의 삶부터 돌아봅니다.</p>
           </section>
           <div id="choice-sections" class="choice-sections"></div>
           <div class="chapter-controls">
@@ -125,8 +122,8 @@
             <span id="selection-count">0 SELECTED</span>
           </div>
           <h2 id="selection-title">당신의 합류 기록</h2>
-          <div class="mini-identity" id="mini-identity">
-            <strong>미등록 인물</strong>
+          <div class="mini-profile" id="mini-profile">
+            <strong>조사 1팀의 새로운 동료</strong>
             <span>기록 작성 중</span>
           </div>
           <div id="selection-summary" class="selection-summary">
@@ -151,8 +148,8 @@
           <div class="character-sheet-heading">
             <div>
               <span class="sheet-label">REGISTERED SUBJECT</span>
-              <strong id="sheet-codename">UNREGISTERED</strong>
-              <p id="sheet-name">이름 미등록</p>
+              <strong id="sheet-subject">당신의 합류 기록</strong>
+              <p id="sheet-profile">나이·성별 미선택</p>
             </div>
             <div class="sheet-seal" aria-hidden="true">ERAC<br />FILE</div>
           </div>
