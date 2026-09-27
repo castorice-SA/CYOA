@@ -461,6 +461,8 @@
 
   function renderWorldGuide(sectionId) {
     const world = window.CYOA_WORLD;
+    // During a Pages cache refresh, an older HTML document may load this script.
+    if (!world || !document.querySelector('#world-guide-details')) return;
     const guide = world.chapters[sectionId];
     const termMarkup = id => {
       const term = world.terms[id];
