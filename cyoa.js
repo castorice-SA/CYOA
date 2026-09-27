@@ -97,18 +97,18 @@
     if (isSelected(choice.id)) return "";
 
     if (!meetsRequirement(choice)) {
-      return choice.lockText || "선행 조건이 필요합니다.";
+      return choice.lockText || "먼저 필요한 항목을 골라 주세요.";
     }
 
     if (section.mode === "multi" && section.max && selectedInSection(section.id).length >= section.max) {
-      return `이 장면에서는 최대 ${section.max}개까지 선택할 수 있습니다.`;
+      return `이 장면에서는 최대 ${section.max}개까지 고를 수 있어요.`;
     }
 
     const excluded = refundableIds(section, choice);
     const spent = pointsSpent(excluded) + (choice.cost || 0);
     const available = BASE_POINTS + projectedRefund(section, choice);
     if (spent > available) {
-      return "구성점이 부족합니다. 마지막 장면에서 대가를 선택하면 구성점이 추가됩니다.";
+      return "구성점이 부족해요. 마지막 장면에서 대가를 고르면 구성점이 늘어나요.";
     }
 
     return "";
@@ -221,7 +221,7 @@
     els.count.textContent = `${state.selected.size} SELECTED`;
 
     if (pointsRemaining() < 0) {
-      els.status.textContent = "구성점이 부족합니다. 능력·장비 선택을 줄이거나 대가를 조정해 주세요.";
+      els.status.textContent = "구성점이 부족해요. 능력이나 장비 선택을 줄이거나 대가를 조정해 주세요.";
     } else if (next) {
       const currentCount = selectedInSection(next.id).length;
       const need = Math.max(0, (next.min || 0) - currentCount);
@@ -229,7 +229,7 @@
         ? `${next.title}: ${need}개를 더 선택해 주세요.`
         : `${next.title}: 선택을 완료해 주세요.`;
     } else {
-      els.status.textContent = "모든 선택을 마쳤습니다. 아래에서 합류 기록을 확인하세요.";
+      els.status.textContent = "모든 선택을 마쳤어요. 아래에서 합류 기록을 확인해 주세요.";
     }
   }
 
@@ -247,7 +247,7 @@
       .filter(group => group.choices.length);
 
     if (!groups.length) {
-      els.summary.innerHTML = '<p class="empty-state">아직 선택된 항목이 없습니다.</p>';
+      els.summary.innerHTML = '<p class="empty-state">아직 선택한 항목이 없어요.</p>';
       return;
     }
 
@@ -284,11 +284,11 @@
       chosen('incident').summary,
       chosen('origin').summary,
       contact.body,
-      `조사 1팀은 ${quoted('traits')} 같은 태도와 ${quoted('mystery')} 능력에 주목했다. 당신은 할 수 있는 일과 동료의 도움이 필요한 지점을 함께 설명했다.`,
+      `조사 1팀은 ${quoted('traits')} 같은 태도와 ${quoted('mystery')} 능력에 주목했어요. 당신은 할 수 있는 일과 동료의 도움이 필요한 지점을 함께 설명했어요.`,
       reason.body,
       principle.body,
-      `동료들에게 힘을 쓴 뒤 겪는 어려움도 미리 알렸다. ${chosen('price').body.split('\n\n')[0]}`,
-      `ID 카드를 수령할 때 전용 보급품으로 ${quoted('equipment')}${equipmentParticle} 골랐다. 지급받은 물품과 사용 안내를 확인한 뒤 조사 1팀으로 향했다.`,
+      `동료들에게 힘을 쓴 뒤 겪는 어려움도 미리 알렸어요. ${chosen('price').body.split('\n\n')[0]}`,
+      `ID 카드를 수령할 때 전용 보급품으로 ${quoted('equipment')}${equipmentParticle} 골랐어요. 지급받은 물품과 사용 안내를 확인한 뒤 조사 1팀으로 향했어요.`,
       '첫 출근 날, 당신은 ERAC 조사 1팀의 문을 열었다.'
     ].join('\n\n');
   }
@@ -300,7 +300,7 @@
     if (!characterComplete()) {
       els.resultState.textContent = "작성 중";
       els.resultState.classList.remove("result-state-ready");
-      els.resultSummary.textContent = "모든 장면을 선택하면 첫 출근까지의 기록이 여기에 표시됩니다.";
+      els.resultSummary.textContent = "모든 장면을 선택하면 첫 출근까지의 기록이 여기에 표시돼요.";
       els.resultRecords.innerHTML = "";
       els.resultNotes.innerHTML = "";
       return;
@@ -414,8 +414,8 @@
         const notice = document.querySelector('#migration-notice');
         notice.hidden = false;
         notice.textContent = needsGenderUpdate
-          ? '성별 선택이 여성·남성 두 항목으로 변경되었습니다. 나머지 저장된 선택은 불러왔습니다. 성별을 다시 고르고 비어 있는 장면이 있다면 이어서 작성해 주세요.'
-          : '저장된 선택을 불러왔습니다. 비어 있는 장면을 이어서 선택해 주세요.';
+          ? '성별 선택이 여성·남성 두 항목으로 바뀌었어요. 나머지 저장된 선택은 불러왔어요. 성별을 다시 고르고 비어 있는 장면이 있다면 이어서 작성해 주세요.'
+          : '저장된 선택을 불러왔어요. 비어 있는 장면을 이어서 선택해 주세요.';
       }
     } catch {
       state.selected.clear();
@@ -445,19 +445,19 @@
 
   function sceneText(id) {
     const scenes = {
-      age: '조사 1팀에 합류하는 날, 당신은 몇 살인가요? 나이에 따라 경력이나 능력이 정해지지는 않습니다.',
-      gender: '합류 기록에 남길 성별을 고릅니다. 여성과 남성 중 하나를 선택해 주세요.',
+      age: '조사 1팀에 합류하는 날, 당신은 몇 살인가요? 나이에 따라 경력이나 능력이 정해지지는 않아요.',
+      gender: '합류 기록에 남길 성별도 정해 볼까요? 여성과 남성 중 하나를 선택해 주세요.',
       background: '어떤 곳에서 살아왔나요? 오래 머물렀거나 지금의 당신에게 큰 영향을 준 환경을 골라 보세요.',
-      principle: '현장에서는 동료와 의견이 다를 수도 있습니다. 그때도 지키고 싶은 원칙은 무엇인가요?',
-      career: '연구청에 오기 전에는 어떤 일을 했나요? 그때 익힌 기술과 일하는 방식도 조사 1팀에 가져옵니다.',
+      principle: '현장에서는 동료와 의견이 다를 수도 있어요. 그때도 지키고 싶은 원칙은 무엇인가요?',
+      career: '연구청에 오기 전에는 어떤 일을 했나요? 그때 익힌 기술과 일하는 방식도 조사 1팀에 가져와요.',
       incident: '이상현상은 어떻게 당신의 일상에 들어왔나요? 연구청과 얽히게 된 사건을 골라 보세요.',
-      origin: '당신의 힘은 어디에서 왔나요? 사건 이전부터 지녔을 수도, 그날 처음 드러났을 수도 있습니다.',
+      origin: '당신의 힘은 어디에서 왔나요? 사건 이전부터 지녔을 수도, 그날 처음 드러났을 수도 있어요.',
       traits: '사건을 겪는 동안 당신은 무엇을 보고 어떻게 행동했나요? 그때 드러난 성향을 두 가지 골라 보세요.',
-      mystery: '조사 1팀은 당신의 힘이 현장에서 어디에 쓰일지 알고 싶어 합니다. 능력과 그 한계를 함께 살펴보고 골라 보세요.',
+      mystery: '조사 1팀은 당신의 힘이 현장에서 어디에 쓰일지 알고 싶어 해요. 능력과 그 한계를 함께 살펴보고 골라 보세요.',
       companion: '조사 1팀과는 어디서 처음 만나거나 연락을 주고받았나요? 그 경위를 골라 보세요.',
-      relationship: '조사 1팀에서 함께 일하자는 제안을 받았습니다. 당신이 받아들인 이유는 무엇인가요?',
-      equipment: '연구청에 처음 출근한 날입니다. ID 카드를 수령하고, 앞으로 조사에 사용할 전용 보급품을 고릅니다. 자신의 능력과 조사 방식에 맞는 물품을 선택해 주세요.',
-      price: '힘을 쓴 뒤 겪는 어려움도 동료에게 알려야 합니다. 당신이 감당하는 대가를 골라 보세요.'
+      relationship: '조사 1팀에서 함께 일하자는 제안을 받았어요. 당신이 받아들인 이유는 무엇인가요?',
+      equipment: '연구청에 처음 출근한 날이에요. ID 카드를 받고 앞으로 조사에 사용할 전용 보급품을 고를 차례예요. 자신의 능력과 조사 방식에 맞는 물품을 선택해 주세요.',
+      price: '힘을 쓴 뒤 겪는 어려움도 동료에게 알려야 해요. 당신이 감당하는 대가를 골라 보세요.'
     };
     return scenes[id];
   }
@@ -514,7 +514,7 @@
     document.querySelector('#chapter-next').disabled = last ? !characterComplete() : !sectionComplete(section);
     document.querySelector('#chapter-hint').textContent = last
       ? (characterComplete() ? '완성된 합류 기록을 확인해 주세요.' : '모든 장면을 선택하고 구성점을 확인해 주세요.')
-      : (sectionComplete(section) ? '선택은 나중에 바꿀 수 있습니다.' : `이 장면에서 ${section.min}개를 선택해 주세요.`);
+      : (sectionComplete(section) ? '선택은 나중에 바꿀 수 있어요.' : `이 장면에서 ${section.min}개를 선택해 주세요.`);
   }
 
   document.querySelector('#chapter-prev').addEventListener('click', () => goToChapter(state.chapter - 1));
