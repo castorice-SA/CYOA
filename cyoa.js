@@ -274,6 +274,8 @@
   function characterSummary() {
     const chosen = id => selectedInSection(id)[0];
     const quoted = id => titles(id).map(title => `‘${title}’`).join(', ');
+    const lastEquipment = titles('equipment').at(-1);
+    const equipmentParticle = (lastEquipment.charCodeAt(lastEquipment.length - 1) - 0xAC00) % 28 === 0 ? '를' : '을';
     const contact = selectedInSection('companion')[0];
     const reason = selectedInSection('relationship')[0];
     const principle = selectedInSection('principle')[0];
@@ -285,9 +287,9 @@
       `위기 속에서 당신은 ${quoted('traits')} 같은 면모를 보였다. 조사 1팀은 그때의 판단과 행동에도 관심을 보였다. 팀에는 ${quoted('mystery')} 능력으로 조사에 힘을 보탤 수 있다고 설명했다. 무엇을 할 수 있는지뿐 아니라, 어느 지점부터 동료의 도움이 필요한지도 함께 이야기했다.`,
       reason.body,
       principle.body,
-      `첫 출근을 앞두고 ${quoted('equipment')}부터 챙겼다. 현장에서 어떻게 사용할지 하나씩 점검했다.`,
       `힘을 쓰는 데는 대가도 따른다. ${chosen('price').body.split('\n\n')[0]} 이 사실은 앞으로 함께 일할 동료들에게 미리 알렸다.`,
-      '첫 출근 날, 당신은 ERAC 조사 1팀의 문을 열었다. 이제 라이카와 동료들 곁에서 첫 조사를 시작할 차례다.'
+      `연구청에 처음 출근한 날, ID 카드를 수령하고 전용 보급품으로 ${quoted('equipment')}${equipmentParticle} 골랐다. 지급받은 물품과 사용 안내를 확인한 뒤 조사 1팀으로 향했다.`,
+      '첫 출근 날, 당신은 ERAC 조사 1팀의 문을 열었다.'
     ].join('\n\n');
   }
 
@@ -320,8 +322,7 @@
 
     const notes = [
       `잔여 구성점: ${pointsRemaining()} / 총 ${totalPoints()}.`,
-      "소속: 황실 이상현상 연구청 · 조사 1팀 / 본부: 런던 / 팀장: 라이카.",
-      "이 기록은 조사 1팀의 첫 출근까지를 담고 있습니다. 풀리지 않은 사건과 앞으로의 이야기는 당신에게 남아 있습니다."
+      "소속: 황실 이상현상 연구청 · 조사 1팀 / 본부: 런던 / 팀장: 라이카."
     ];
     els.resultNotes.innerHTML = notes.map(note => `<li>${note}</li>`).join("");
   }
@@ -352,8 +353,7 @@
       lines.push("");
     }
 
-    lines.push("※ 첫 출근까지의 기록입니다. 이후의 이야기는 자유롭게 이어 가세요.");
-    return lines.join("\n");
+    return lines.join("\n").trimEnd();
   }
 
   async function copyReport() {
@@ -456,7 +456,7 @@
       mystery: '조사 1팀은 당신의 힘이 얼마나 강한지만 묻지 않습니다. 그 힘으로 어떤 단서를 찾고, 어떻게 동료를 도울 수 있는지도 알고 싶어 합니다. 당신이 할 수 있는 일을 골라 보세요.',
       companion: '어떤 만남은 사건 현장에서, 어떤 만남은 보고서 한 장에서 시작됩니다. 당신은 어떻게 조사 1팀과 처음 연락을 주고받게 됐나요?',
       relationship: '몇 차례 연락을 주고받은 뒤, 함께 일해 보자는 제안이 왔습니다. 제안을 받아들일지는 당신에게 달려 있습니다. 무엇이 마음을 움직였나요?',
-      equipment: '합류를 결정했으니 출근 준비를 할 시간입니다. 앞으로 현장에서 사용할 장비를 살펴봅니다. 무엇부터 챙기고 싶나요?',
+      equipment: '연구청에 처음 출근한 날입니다. ID 카드를 수령하고, 앞으로 조사에 사용할 전용 보급품을 고릅니다. 자신의 능력과 조사 방식에 맞는 물품을 선택해 주세요.',
       price: '동료들에게 미리 말해 두어야 할 것이 하나 남았습니다. 힘을 쓰고 나면 당신은 어떤 어려움을 겪나요? 함께 일할 사람들이 알아 두어야 할 대가를 골라 보세요.'
     };
     return scenes[id];
@@ -513,7 +513,7 @@
     document.querySelector('#chapter-next').textContent = last ? '합류 기록 보기' : '다음 장면';
     document.querySelector('#chapter-next').disabled = last ? !characterComplete() : !sectionComplete(section);
     document.querySelector('#chapter-hint').textContent = last
-      ? (characterComplete() ? '첫 출근을 앞둔 당신의 기록이 준비되었습니다.' : '모든 장면을 선택하고 구성점을 확인해 주세요.')
+      ? (characterComplete() ? '완성된 합류 기록을 확인해 주세요.' : '모든 장면을 선택하고 구성점을 확인해 주세요.')
       : (sectionComplete(section) ? '선택은 나중에 바꿀 수 있습니다.' : `이 장면에서 ${section.min}개를 선택해 주세요.`);
   }
 
