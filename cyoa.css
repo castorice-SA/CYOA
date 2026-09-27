@@ -954,6 +954,12 @@ html { scroll-padding-top: 11rem; }
 .all-terms { border-top: 1px solid var(--line); }
 .all-terms > summary { font-size: .9rem; color: #b7c8cf; }
 .all-terms .guide-content { padding-top: .4rem; }
+.guide-term .guide-submission { margin: 1rem 0 0; padding: 1rem; border: 1px solid var(--line-strong); background: #22202a; color: #e1d9df; }
+.submission-note { margin-top: 2rem; padding: 1.3rem; border: 1px solid var(--line-strong); background: #1b1c25; }
+.submission-note h3 { font-size: 1.15rem; margin-bottom: .7rem; }
+.submission-note p { line-height: 1.85; color: #d1d5de; }
+#copy-result { width: 100%; padding: 1rem; border: 1px solid #927783; font-size: 1rem; line-height: 1.65; }
+#copy-result:disabled { opacity: .6; cursor: default; }
 @media (max-width: 720px) {
   .world-guide summary { padding: 1rem; }
   .guide-content { padding: 0 1rem 1rem; }

@@ -20,6 +20,7 @@ function load(saved = {}) {
 }
 const {model:m} = load();
 const all=m.sections.flatMap(s=>s.choices);
+assert.deepEqual(Array.from(m.sections.find(s=>s.id==='gender').choices,c=>c.id),['gender_woman','gender_man']);
 const ids = new Set(all.map(c=>c.id));
 assert.equal(ids.size,all.length,'Choice IDs must be unique for saved selections');
 for(const section of m.sections) {
@@ -50,11 +51,11 @@ assert.equal(elements.get('#migration-notice').hidden,false);
 assert.doesNotMatch(restored.buildReportText(),/STALE_PRIVATE_NAME|STALE_CODE|이름:|코드네임:/);
 const {model:empty} = load({'laika-team01-cyoa-v2':'[]','laika-standalone-cyoa-v1':JSON.stringify(old)});
 empty.restore();assert.equal(empty.state.selected.size,0,'Reset must not resurrect a legacy save');
-console.log('PASS: choice references, all 24 age/gender builds, budget, conditional routes, legacy saves, and removed identity fields.');
+console.log('PASS: choice references, all 12 age/gender builds, budget, conditional routes, legacy saves, and removed identity fields.');
 
 // Each prose branch must produce a complete story, including less common backgrounds.
 const {model:story} = load();
-const storyBase = [...base.filter(id=>id!=='price_contract'),'price_sense','age_thirties','gender_unspecified'];
+const storyBase = [...base.filter(id=>id!=='price_contract'),'price_sense','age_thirties','gender_woman'];
 for (const section of story.sections.filter(s=>['background','career','incident','origin'].includes(s.id))) {
   for (const option of section.choices) {
     story.state.selected = new Set(storyBase.filter(id=>!section.choices.some(c=>c.id===id)));
@@ -73,4 +74,38 @@ for (const section of story.sections) {
   assert.ok(guide.chapters[section.id]?.intro,section.id+' has beginner guidance');
   for (const id of guide.chapters[section.id].terms) assert.ok(guide.terms[id]?.text && guide.terms[id]?.example,'Missing glossary explanation: '+id);
 }
-console.log('PASS: all 33 narrative branches and glossary coverage for 13 chapters.');
+console.log('PASS: all narrative branches and glossary coverage for 13 chapters.');
+
+for (const retired of ['gender_nonbinary','gender_unspecified']) {
+  const savedChoices = [...storyBase.filter(id=>id!=='gender_woman'),retired];
+  const {model:upgraded,elements:ui} = load({'laika-team01-cyoa-v2':JSON.stringify(savedChoices)});
+  upgraded.restore();
+  assert.equal(upgraded.state.selected.size,savedChoices.length-1,'Only the retired gender selection is removed');
+  assert.equal(upgraded.characterComplete(),false,'Retired gender needs an explicit new selection');
+  assert.match(ui.get('#migration-notice').textContent,/성별.*여성·남성/);
+  assert.ok(upgraded.state.selected.has('career_engineer'));
+  upgraded.state.selected.add('gender_man');
+  assert.equal(upgraded.characterComplete(),true);
+}
+
+// Every choice must fit at least one valid build, including the new abilities and costs.
+const {model:coverage} = load();
+const defaults = [...storyBase.filter(id=>!['join_trust','price_sense'].includes(id)),'join_answer','price_memory'];
+for (const section of coverage.sections) for (const choice of section.choices) {
+  coverage.state.selected = new Set(defaults.filter(id=>!section.choices.some(c=>c.id===id)));
+  coverage.state.selected.add(choice.id);
+  if (section.min > 1) coverage.state.selected.add(section.choices.find(c=>c.id!==choice.id).id);
+  for (const req of choice.requiresAll || []) {
+    const reqSection = coverage.sections.find(s=>s.choices.some(c=>c.id===req));
+    if (reqSection.mode==='single') reqSection.choices.forEach(c=>coverage.state.selected.delete(c.id));
+    coverage.state.selected.add(req);
+  }
+  assert.equal(coverage.disabledReason(choice,section),'');
+  assert.equal(coverage.characterComplete(),true,choice.id+' completes within budget');
+  const report=coverage.buildReportText();
+  assert.ok(report.includes(choice.title));
+  assert.doesNotMatch(report,/undefined|&#x20;/);
+  assert.ok(report.includes('본부: 런던'));
+}
+assert.equal(all.length,137);
+console.log('PASS: all 137 choices can complete; retired gender saves retain other selections.');

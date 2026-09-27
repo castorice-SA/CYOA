@@ -36,7 +36,8 @@
     resultNotes: document.querySelector("#result-notes"),
     sheetSubject: document.querySelector("#sheet-subject"),
     sheetProfile: document.querySelector("#sheet-profile"),
-    copy: document.querySelector("#copy-report")
+    copy: document.querySelector("#copy-report"),
+    copyResult: document.querySelector("#copy-result")
   };
 
   function isSelected(id) {
@@ -292,6 +293,7 @@
 
   function renderResult() {
     renderProfile();
+    if (els.copyResult) els.copyResult.disabled = !characterComplete();
 
     if (!characterComplete()) {
       els.resultState.textContent = "작성 중";
@@ -318,7 +320,7 @@
 
     const notes = [
       `잔여 구성점: ${pointsRemaining()} / 총 ${totalPoints()}.`,
-      "소속: 황실 이상현상 연구청 · 조사 1팀 / 팀장: 라이카.",
+      "소속: 황실 이상현상 연구청 · 조사 1팀 / 본부: 런던 / 팀장: 라이카.",
       "이 기록은 조사 1팀의 첫 출근까지를 담고 있습니다. 풀리지 않은 사건과 앞으로의 이야기는 당신에게 남아 있습니다."
     ];
     els.resultNotes.innerHTML = notes.map(note => `<li>${note}</li>`).join("");
@@ -331,6 +333,8 @@
       `나이: ${firstTitle('age') || '미선택'}`,
       `성별: ${firstTitle('gender') || '미선택'}`,
       `구성점: ${pointsRemaining()} / ${totalPoints()}`,
+      "소속: 황실 이상현상 연구청 · 조사 1팀",
+      "본부: 런던 / 팀장: 라이카",
       ""
     ];
 
@@ -357,6 +361,7 @@
     try {
       await navigator.clipboard.writeText(text);
       els.copy.textContent = "복사됨";
+      if (els.copyResult) els.copyResult.textContent = "복사됨 · 프로필 사진과 함께 제출하세요";
     } catch {
       const area = document.createElement("textarea");
       area.value = text;
@@ -368,9 +373,11 @@
       document.execCommand("copy");
       area.remove();
       els.copy.textContent = "복사됨";
+      if (els.copyResult) els.copyResult.textContent = "복사됨 · 프로필 사진과 함께 제출하세요";
     }
     window.setTimeout(() => {
       els.copy.textContent = "합류 기록 복사";
+      if (els.copyResult) els.copyResult.textContent = "완성된 합류 기록 복사";
     }, 1500);
   }
 
@@ -396,16 +403,19 @@
       const currentSave = localStorage.getItem(STORAGE_KEY);
       const legacySave = currentSave === null ? localStorage.getItem(LEGACY_KEY) : null;
       const saved = JSON.parse(currentSave || legacySave || "[]");
+      const needsGenderUpdate = Array.isArray(saved) && saved.some(id => ['gender_nonbinary', 'gender_unspecified'].includes(id));
       if (Array.isArray(saved)) {
         saved.filter(id => choiceMap.has(id)).forEach(id => state.selected.add(id));
       }
 
       sanitizeSelections();
       const missingNewChapters = ['age', 'gender', 'background', 'principle'].filter(id => !selectedInSection(id).length);
-      if (state.selected.size && (legacySave || missingNewChapters.length)) {
+      if (needsGenderUpdate || (state.selected.size && (legacySave || missingNewChapters.length))) {
         const notice = document.querySelector('#migration-notice');
         notice.hidden = false;
-        notice.textContent = '저장된 선택을 불러왔습니다. 나이·성별·살아온 자리·팀에서 지킬 약속 등 비어 있는 장면을 이어서 선택해 주세요.';
+        notice.textContent = needsGenderUpdate
+          ? '성별 선택이 여성·남성 두 항목으로 변경되었습니다. 나머지 저장된 선택은 불러왔습니다. 성별을 다시 고르고 비어 있는 장면이 있다면 이어서 작성해 주세요.'
+          : '저장된 선택을 불러왔습니다. 비어 있는 장면을 이어서 선택해 주세요.';
       }
     } catch {
       state.selected.clear();
@@ -425,6 +435,7 @@
   }
 
   function render() {
+    if (characterComplete()) document.querySelector('#migration-notice').hidden = true;
     renderSections();
     renderStatus();
     renderSummary();
@@ -435,7 +446,7 @@
   function sceneText(id) {
     const scenes = {
       age: '조사 1팀에 처음 출근하는 날입니다. 문 앞에 선 당신은 몇 살인가요? 이제 막 자기 삶을 꾸리기 시작했을 수도, 오래 해 온 일을 뒤로하고 새 출발을 앞두고 있을 수도 있습니다.',
-      gender: '이번에는 당신의 성별을 정합니다. 원하는 항목을 고르거나, 아직 정하지 않은 채 다음 장면으로 넘어가도 좋습니다.',
+      gender: '이번에는 당신의 성별을 정합니다. 여성과 남성 중 하나를 고른 뒤, 당신이 살아온 곳으로 이야기를 이어 갑니다.',
       background: '자주 걷던 길과 매일 듣던 소리, 익숙한 사람들을 떠올려 보세요. 조사 1팀에 오기 전, 당신은 어떤 곳에서 살아왔나요?',
       principle: '함께 일하다 보면 의견이 갈리거나 어려운 결정을 내려야 할 때가 옵니다. 그런 순간에 동료들과 어떤 약속을 지키고 싶나요?',
       career: '문패에는 황실 이상현상 연구청, 조사 1팀이라고 적혀 있습니다. 잠시 이곳에 오기 전으로 돌아가 봅니다. 당신에게 익숙했던 하루는 어떤 모습이었나요?',
@@ -466,7 +477,7 @@
     const guide = world.chapters[sectionId];
     const termMarkup = id => {
       const term = world.terms[id];
-      return `<div class="guide-term"><dt>${escapeHtml(term.title)}</dt><dd><p>${escapeHtml(term.text)}</p><p class="guide-example">${escapeHtml(term.example)}</p></dd></div>`;
+      return `<div class="guide-term"><dt>${escapeHtml(term.title)}</dt><dd><p>${escapeHtml(term.text)}</p><p class="guide-example">${escapeHtml(term.example)}</p>${term.notice ? `<p class="guide-submission">${escapeHtml(term.notice)}</p>` : ''}</dd></div>`;
     };
     document.querySelector('#world-guide-title').textContent = guide.title;
     document.querySelector('#world-guide-intro').textContent = guide.intro;
@@ -520,6 +531,7 @@
   document.querySelector("#reset-top").addEventListener("click", resetAll);
   document.querySelector("#reset-side").addEventListener("click", resetAll);
   document.querySelector("#copy-report").addEventListener("click", copyReport);
+  if (els.copyResult) els.copyResult.addEventListener("click", copyReport);
 
   restore();
   render();
