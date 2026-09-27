@@ -100,14 +100,14 @@
     }
 
     if (section.mode === "multi" && section.max && selectedInSection(section.id).length >= section.max) {
-      return `이 구획에서는 최대 ${section.max}개까지 선택할 수 있습니다.`;
+      return `이 장면에서는 최대 ${section.max}개까지 선택할 수 있습니다.`;
     }
 
     const excluded = refundableIds(section, choice);
     const spent = pointsSpent(excluded) + (choice.cost || 0);
     const available = BASE_POINTS + projectedRefund(section, choice);
     if (spent > available) {
-      return "남은 구성점이 부족합니다. 먼저 대가를 선택하면 일부 점수를 되돌려 받을 수 있습니다.";
+      return "구성점이 부족합니다. 마지막 장면에서 대가를 선택하면 구성점이 추가됩니다.";
     }
 
     return "";
@@ -220,15 +220,15 @@
     els.count.textContent = `${state.selected.size} SELECTED`;
 
     if (pointsRemaining() < 0) {
-      els.status.textContent = "구성점이 부족합니다. 능력·장비 선택을 줄이거나 대가를 조정하십시오.";
+      els.status.textContent = "구성점이 부족합니다. 능력·장비 선택을 줄이거나 대가를 조정해 주세요.";
     } else if (next) {
       const currentCount = selectedInSection(next.id).length;
       const need = Math.max(0, (next.min || 0) - currentCount);
       els.status.textContent = need > 1
-        ? `${next.title}: ${need}개를 더 선택하십시오.`
+        ? `${next.title}: ${need}개를 더 선택해 주세요.`
         : `${next.title}: 선택을 완료해 주세요.`;
     } else {
-      els.status.textContent = "조사 1팀 합류 기록이 완성되었습니다. 당신의 첫 출근을 확인하십시오.";
+      els.status.textContent = "모든 선택을 마쳤습니다. 아래에서 당신의 합류 이야기를 읽어 보세요.";
     }
   }
 
@@ -271,17 +271,22 @@
   }
 
   function characterSummary() {
+    const chosen = id => selectedInSection(id)[0];
+    const quoted = id => titles(id).map(title => `‘${title}’`).join(', ');
     const contact = selectedInSection('companion')[0];
     const reason = selectedInSection('relationship')[0];
     const principle = selectedInSection('principle')[0];
     return [
-      `합류 당시의 나이대는 ${firstTitle('age')}, 성별 항목은 ‘${firstTitle('gender')}’로 남겼다. 삶의 배경으로 고른 것은 ‘${firstTitle('background')}’. 조사 1팀에 오기 전에는 ${firstTitle('career')} 일을 했다.`,
-      `일상을 바꾼 것은 ‘${firstTitle('incident')}’ 사건이었다. 힘의 기원은 ${firstTitle('origin')}. 당시의 행동에서는 ${titles('traits').join(', ')} 같은 태도가 드러났다. 팀에는 ${titles('mystery').join(', ')} 능력을 활용할 수 있다고 알렸다.`,
+      `${chosen('background').summary} ${chosen('career').summary}`,
+      chosen('incident').summary,
+      chosen('origin').summary,
       contact.body,
+      `위기 속에서 당신은 ${quoted('traits')} 같은 면모를 보였다. 조사 1팀은 그때의 판단과 행동에도 관심을 보였다. 팀에는 ${quoted('mystery')} 능력으로 조사에 힘을 보탤 수 있다고 설명했다. 무엇을 할 수 있는지뿐 아니라, 어느 지점부터 동료의 도움이 필요한지도 함께 이야기했다.`,
       reason.body,
-      `함께 일하며 지킬 약속은 ‘${firstTitle('principle')}’. ${principle.body}`,
-      `합류를 결정한 뒤 ${titles('equipment').join(', ')} 장비를 챙겼다. 동료들에게는 ‘${firstTitle('price')}’라는 대가도 알렸다. 힘의 한계를 숨기지 않는 것이 함께 일하기 위한 첫 약속이었다.`,
-      '첫 출근 날, 당신은 ERAC 조사 1팀의 문을 열었다. 팀장 라이카와 함께할 조사는 이제부터다.'
+      principle.body,
+      `첫 출근을 앞두고 ${quoted('equipment')}부터 챙겼다. 현장에서 어떻게 사용할지 하나씩 점검했다.`,
+      `힘을 쓰는 데는 대가도 따른다. ${chosen('price').body.split('\n\n')[0]} 이 사실은 앞으로 함께 일할 동료들에게 미리 알렸다.`,
+      '첫 출근 날, 당신은 ERAC 조사 1팀의 문을 열었다. 이제 라이카와 동료들 곁에서 첫 조사를 시작할 차례다.'
     ].join('\n\n');
   }
 
@@ -314,7 +319,7 @@
     const notes = [
       `잔여 구성점: ${pointsRemaining()} / 총 ${totalPoints()}.`,
       "소속: 황실 이상현상 연구청 · 조사 1팀 / 팀장: 라이카.",
-      "기록은 팀에 합류한 시점까지입니다. 과거 사건의 진상과 앞으로의 조사는 아직 열려 있습니다."
+      "이 기록은 조사 1팀의 첫 출근까지를 담고 있습니다. 풀리지 않은 사건과 앞으로의 이야기는 당신에게 남아 있습니다."
     ];
     els.resultNotes.innerHTML = notes.map(note => `<li>${note}</li>`).join("");
   }
@@ -343,7 +348,7 @@
       lines.push("");
     }
 
-    lines.push("※ 첫 출근까지의 기록입니다. 이후 조사의 결말은 결정하지 않습니다.");
+    lines.push("※ 첫 출근까지의 기록입니다. 이후의 이야기는 자유롭게 이어 가세요.");
     return lines.join("\n");
   }
 
@@ -428,24 +433,20 @@
   }
 
   function sceneText(id) {
-    const career = firstTitle('career') || '아직 기록되지 않은 직업';
-    const incident = firstTitle('incident');
-    const contact = firstTitle('companion');
-    const prelude = incident ? `‘${incident}’ 이후, 당신의 삶에는 설명해야 할 것이 남았습니다. ` : '';
     const scenes = {
-      age: '아직 쓰이지 않은 합류 기록의 첫 장을 펼칩니다. 당신이 이 문 앞에 오기까지 얼마나 많은 계절이 지나갔을까요? 처음 배우는 일이 많을 수도, 오래 해 온 일을 다른 방식으로 이어갈 수도 있습니다. 지금의 나이대를 선택하십시오.',
-      gender: '당신을 기록하는 몇 개의 항목이 당신 전체를 설명할 수는 없습니다. 성별은 능력이나 성격을 미리 정하는 조건이 아닙니다. 원하는 항목을 고르고 다음 장면에서 당신만의 배경을 이어 갑니다.',
-      background: '당신에게 익숙한 풍경을 떠올립니다. 매일 듣던 소리와 자주 만나던 사람, 어디서나 먼저 확인하게 되는 것들은 살아온 장소에서 배웠을지 모릅니다. 구체적인 국적을 정하기보다 그 생활의 모양을 하나 고릅니다.',
-      principle: '팀에 들어가겠다는 대답만으로 함께 일하는 방법까지 정해지지는 않습니다. 의견이 갈리거나 위험이 커졌을 때 무엇을 기준으로 말할지 생각합니다. 완벽히 지킬 수 있다는 장담보다, 흔들릴 때 동료와 다시 확인할 약속을 남깁니다.',
-      career: '문패에는 황실 이상현상 연구청, 조사 1팀이라고 적혀 있습니다. 하지만 당신의 이야기는 이 문 앞에서 시작되지 않습니다. 그보다 전, 익숙했던 일상으로 돌아갑니다.',
-      incident: `당시 당신의 직업은 ${career}. 익숙한 지식과 경험만으로는 설명할 수 없는 일이 벌어졌습니다. 그 사건이 연구청과 당신을 잇는 첫 실마리가 됩니다.`,
-      origin: prelude + '당신의 힘 역시 그중 하나였습니다. 처음 힘을 얻었던 순간을 떠올립니다. 사건 이전의 일이든, 바로 그 사건 속의 일이든 괜찮습니다.',
-      traits: prelude + '진술서에는 사건의 경과가 적혔지만, 그 순간 당신이 어떤 사람이었는지까지 담기지는 않았습니다. 당신의 행동을 설명하는 두 가지 태도를 남깁니다.',
-      mystery: `직업은 ${career}, 힘의 기원은 ${firstTitle('origin') || '미정'}. 조사 1팀이 묻는 것은 힘의 크기만이 아닙니다. 그 힘으로 무엇을 알아내고, 누구를 도울 수 있는지가 중요합니다.`,
-      companion: prelude + '어떤 만남은 현장에서, 어떤 만남은 한 장의 보고서에서 시작됩니다. 조사 1팀과 당신의 이야기가 처음 겹친 순간을 고릅니다.',
-      relationship: contact ? `첫 접점은 ‘${contact}’였습니다. 연락과 확인을 거친 뒤, 함께 일해 보자는 제안이 도착했습니다. 문을 통과할지 결정하는 것은 당신입니다.` : '조사 1팀과 함께 일할 기회가 생겼습니다. 먼저 첫 접점을 정하면 그 만남에 이어지는 합류 이유를 선택할 수 있습니다.',
-      equipment: `‘${firstTitle('relationship') || '아직 정하지 않은 이유'}’. 마음을 정한 뒤에는 실제 준비가 남았습니다. 첫 출근을 앞두고 현장에 가져갈 장비를 확인합니다.`,
-      price: '입을 다물고 지나갈 수도 있는 질문이 하나 남았습니다. 힘을 쓰고 난 뒤, 당신에게는 무엇이 남습니까? 앞으로 곁에 설 동료들에게 그 대가를 알립니다.'
+      age: '조사 1팀에 처음 출근하는 날입니다. 문 앞에 선 당신은 몇 살인가요? 이제 막 자기 삶을 꾸리기 시작했을 수도, 오래 해 온 일을 뒤로하고 새 출발을 앞두고 있을 수도 있습니다.',
+      gender: '이번에는 당신의 성별을 정합니다. 원하는 항목을 고르거나, 아직 정하지 않은 채 다음 장면으로 넘어가도 좋습니다.',
+      background: '자주 걷던 길과 매일 듣던 소리, 익숙한 사람들을 떠올려 보세요. 조사 1팀에 오기 전, 당신은 어떤 곳에서 살아왔나요?',
+      principle: '함께 일하다 보면 의견이 갈리거나 어려운 결정을 내려야 할 때가 옵니다. 그런 순간에 동료들과 어떤 약속을 지키고 싶나요?',
+      career: '문패에는 황실 이상현상 연구청, 조사 1팀이라고 적혀 있습니다. 잠시 이곳에 오기 전으로 돌아가 봅니다. 당신에게 익숙했던 하루는 어떤 모습이었나요?',
+      incident: '익숙한 지식과 경험으로는 설명할 수 없는 일이 벌어졌습니다. 당신의 일상을 바꾸고 연구청과 인연을 맺게 한 그날의 사건을 골라 보세요.',
+      origin: '사건을 설명하다 보니 당신이 가진 힘에 관한 질문이 나옵니다. 처음 그 힘을 얻었던 때를 떠올려 보세요. 사건 이전부터 지녔을 수도, 그날 처음 눈을 떴을 수도 있습니다.',
+      traits: '진술서에는 무슨 일이 벌어졌는지 적혀 있습니다. 하지만 그 순간 당신이 무엇을 보고 어떻게 행동했는지까지 담기지는 않았습니다. 그날 드러난 당신의 성향을 두 가지 골라 보세요.',
+      mystery: '조사 1팀은 당신의 힘이 얼마나 강한지만 묻지 않습니다. 그 힘으로 어떤 단서를 찾고, 어떻게 동료를 도울 수 있는지도 알고 싶어 합니다. 당신이 할 수 있는 일을 골라 보세요.',
+      companion: '어떤 만남은 사건 현장에서, 어떤 만남은 보고서 한 장에서 시작됩니다. 당신은 어떻게 조사 1팀과 처음 연락을 주고받게 됐나요?',
+      relationship: '몇 차례 연락을 주고받은 뒤, 함께 일해 보자는 제안이 왔습니다. 제안을 받아들일지는 당신에게 달려 있습니다. 무엇이 마음을 움직였나요?',
+      equipment: '합류를 결정했으니 출근 준비를 할 시간입니다. 앞으로 현장에서 사용할 장비를 살펴봅니다. 무엇부터 챙기고 싶나요?',
+      price: '동료들에게 미리 말해 두어야 할 것이 하나 남았습니다. 힘을 쓰고 나면 당신은 어떤 어려움을 겪나요? 함께 일할 사람들이 알아 두어야 할 대가를 골라 보세요.'
     };
     return scenes[id];
   }
@@ -458,8 +459,25 @@
     scene.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  function renderWorldGuide(sectionId) {
+    const world = window.CYOA_WORLD;
+    const guide = world.chapters[sectionId];
+    const termMarkup = id => {
+      const term = world.terms[id];
+      return `<div class="guide-term"><dt>${escapeHtml(term.title)}</dt><dd><p>${escapeHtml(term.text)}</p><p class="guide-example">${escapeHtml(term.example)}</p></dd></div>`;
+    };
+    document.querySelector('#world-guide-title').textContent = guide.title;
+    document.querySelector('#world-guide-intro').textContent = guide.intro;
+    const terms = document.querySelector('#world-guide-terms');
+    terms.innerHTML = guide.terms.map(termMarkup).join('');
+    terms.hidden = !guide.terms.length;
+    const glossary = document.querySelector('#world-glossary');
+    if (!glossary.children.length) glossary.innerHTML = Object.keys(world.terms).map(termMarkup).join('');
+  }
+
   function renderChapter() {
     const section = sections[state.chapter];
+    renderWorldGuide(section.id);
     const nav = document.querySelector('#chapter-nav');
     if (!nav.children.length) sections.forEach((chapter, index) => {
       const button = document.createElement('button');

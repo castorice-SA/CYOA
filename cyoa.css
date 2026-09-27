@@ -926,3 +926,35 @@ html { scroll-padding-top: 11rem; }
 @media (max-width: 1050px) {
   .selection-dossier { top: auto; }
 }
+
+.world-guide {
+  margin-bottom: 2.4rem;
+  border: 1px solid #46515c;
+  background: #111a21;
+  color: #d1d5de;
+}
+.world-guide summary {
+  padding: 1rem 1.3rem;
+  cursor: pointer;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.world-guide summary::marker { color: #b5c9cf; }
+.world-guide summary:focus-visible { outline: 2px solid #c7adb9; outline-offset: 3px; }
+.guide-label { color: #b5c9cf; font-size: .85rem; }
+#world-guide-title { display: block; font-size: 1.15rem; margin-top: .3rem; word-break: keep-all; }
+.guide-content { padding: 0 1.3rem 1.3rem; }
+#world-guide-intro { margin-bottom: 1.2rem; line-height: 1.85; }
+.guide-terms { margin: 0; }
+.guide-term + .guide-term { margin-top: 1.15rem; padding-top: 1.15rem; border-top: 1px solid var(--line); }
+.guide-term dt { color: #e1d9df; font-weight: 700; margin-bottom: .5rem; }
+.guide-term dd { margin: 0; }
+.guide-term p { margin-bottom: .6rem; line-height: 1.85; overflow-wrap: anywhere; }
+.guide-term .guide-example { margin-bottom: 0; padding-left: .8rem; border-left: 2px solid #6d8791; color: #b7c8cf; font-size: .95rem; }
+.all-terms { border-top: 1px solid var(--line); }
+.all-terms > summary { font-size: .9rem; color: #b7c8cf; }
+.all-terms .guide-content { padding-top: .4rem; }
+@media (max-width: 720px) {
+  .world-guide summary { padding: 1rem; }
+  .guide-content { padding: 0 1rem 1rem; }
+}
