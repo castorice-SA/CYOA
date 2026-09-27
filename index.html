@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Laika 세계관 CYOA — 직업, 힘의 기원, 특성, 신비 능력, 장비, 동료, 과거 사건, 관계와 대가를 선택해 나만의 인물을 만드는 기록 단말."
+    />
+    <meta name="theme-color" content="#090a0c" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090a0c'/%3E%3Cpath d='M18 16h10v23h19v9H18Z' fill='%23a4a9b2'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="cyoa.css?v=2" />
+    <script src="cyoa.js?v=2" defer></script>
+    <title>인물 생성 기록 · Laika CYOA</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#choice-sections">선택 항목으로 건너뛰기</a>
+
+    <header class="terminal-header">
+      <a class="terminal-brand" href="./" aria-label="CYOA 첫 화면으로">
+        <span class="terminal-brand-mark">L</span>
+        <span>
+          <strong>LAIKA CYOA</strong>
+          <small>ERAC / PERSONNEL CONSTRUCTION</small>
+        </span>
+      </a>
+      <nav aria-label="보조 메뉴">
+        <a href="https://castorice-sa.github.io/Laika/profile.html">라이카 기록</a>
+        <button id="reset-top" class="text-button" type="button">초기화</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero character-hero" aria-labelledby="page-title">
+        <div class="hero-backdrop" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <p class="kicker">ERAC · PERSONNEL CONSTRUCTION / CYOA</p>
+          <h1 id="page-title">당신의 기록</h1>
+          <p class="hero-lead">
+            세계는 이미 이상해졌다.<br />
+            이제 그 안에 당신이 들어올 차례다.
+          </p>
+          <p class="hero-description">
+            직업과 힘의 기원, 성격적 특성, 사용할 신비와 장비, 함께 움직일 사람,
+            당신을 바꾼 사건과 연구청과의 관계, 그리고 힘을 사용할 때 치르게 될 대가를 선택하십시오.
+            이 페이지는 이야기를 끝내지 않습니다. 캐릭터가 시작된 지점만 기록합니다.
+          </p>
+          <div class="hero-notice">
+            <span>CONSTRUCTION NOTICE</span>
+            <p>
+              선택지는 Laika 프로젝트의 세계관을 바탕으로 한 캐릭터 제작용 구성입니다.
+              원작에서 확인되지 않은 세부 조합은 프로젝트용 창작 설정으로 취급합니다.
+            </p>
+          </div>
+        </div>
+
+        <aside class="hero-card identity-card" aria-labelledby="identity-title">
+          <div class="seal-frame">
+            <img
+              src="assets/erac/erac-logo-extranormal-v2.png"
+              width="1254"
+              height="1254"
+              alt=""
+              decoding="async"
+            />
+          </div>
+          <div class="identity-fields">
+            <p class="kicker" id="identity-title">PERSONAL DATA</p>
+            <label>
+              <span>이름</span>
+              <input id="character-name" type="text" maxlength="30" placeholder="미등록" autocomplete="off" />
+            </label>
+            <label>
+              <span>코드네임</span>
+              <input id="character-codename" type="text" maxlength="24" placeholder="선택 사항" autocomplete="off" />
+            </label>
+            <label>
+              <span>나이</span>
+              <input id="character-age" type="number" min="18" max="120" inputmode="numeric" placeholder="18+" />
+            </label>
+          </div>
+        </aside>
+      </section>
+
+      <section class="status-console" aria-label="현재 캐릭터 구성 상태">
+        <div class="status-primary">
+          <span class="status-label">구성점</span>
+          <strong><span id="resource-value">8</span><small id="resource-total"> / 8</small></strong>
+        </div>
+        <div class="status-primary">
+          <span class="status-label">대가 보정</span>
+          <strong><span id="refund-value">0</span><small> PT</small></strong>
+        </div>
+        <div class="status-progress" aria-hidden="true">
+          <span id="progress-bar"></span>
+        </div>
+        <p id="status-message" role="status" aria-live="polite">직업을 선택하십시오.</p>
+      </section>
+
+      <div class="play-layout">
+        <div id="choice-sections" class="choice-sections"></div>
+
+        <aside class="selection-dossier" aria-labelledby="selection-title">
+          <div class="dossier-topline">
+            <p class="kicker">LIVE PERSONNEL FILE</p>
+            <span id="selection-count">0 SELECTED</span>
+          </div>
+          <h2 id="selection-title">현재 캐릭터</h2>
+          <div class="mini-identity" id="mini-identity">
+            <strong>미등록 인물</strong>
+            <span>기록 작성 중</span>
+          </div>
+          <div id="selection-summary" class="selection-summary">
+            <p class="empty-state">아직 선택된 항목이 없습니다.</p>
+          </div>
+          <div class="dossier-actions">
+            <button id="copy-report" class="secondary-action" type="button">캐릭터 시트 복사</button>
+            <button id="reset-side" class="secondary-action" type="button">선택 초기화</button>
+          </div>
+        </aside>
+      </div>
+
+      <section id="result-panel" class="result-panel character-result" aria-labelledby="result-title">
+        <div class="result-heading">
+          <div>
+            <p class="kicker">PERSONNEL OUTPUT</p>
+            <h2 id="result-title">개인 기록 카드</h2>
+          </div>
+          <span id="result-state">작성 중</span>
+        </div>
+        <div class="character-sheet">
+          <div class="character-sheet-heading">
+            <div>
+              <span class="sheet-label">REGISTERED SUBJECT</span>
+              <strong id="sheet-codename">UNREGISTERED</strong>
+              <p id="sheet-name">이름 미등록</p>
+            </div>
+            <div class="sheet-seal" aria-hidden="true">ERAC<br />FILE</div>
+          </div>
+          <p id="result-summary">
+            마지막 항목인 대가까지 선택하면 지금까지의 선택이 하나의 캐릭터 기록으로 정리됩니다.
+          </p>
+          <div id="result-records" class="result-records"></div>
+          <ul id="result-notes"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>ERAC / PERSONNEL CONSTRUCTION TERMINAL</span>
+      <span>NO ENDING · CHARACTER ORIGIN ONLY</span>
+    </footer>
+
+    <template id="choice-template">
+      <button class="choice-card" type="button">
+        <span class="choice-meta">
+          <span class="choice-code"></span>
+          <span class="choice-cost"></span>
+        </span>
+        <strong class="choice-title"></strong>
+        <span class="choice-body"></span>
+        <span class="choice-footer">
+          <span class="choice-effect"></span>
+          <span class="choice-state">선택</span>
+        </span>
+        <span class="choice-lock"></span>
+      </button>
+    </template>
+  </body>
+</html>
