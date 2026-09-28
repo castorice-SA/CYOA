@@ -108,5 +108,5 @@ for (const section of coverage.sections) for (const choice of section.choices) {
   assert.doesNotMatch(report,/undefined|&#x20;/);
   assert.ok(report.includes('본부: 런던'));
 }
-assert.equal(all.length,137);
-console.log('PASS: all 137 choices can complete; retired gender saves retain other selections.');
+assert.equal(all.length,157);
+console.log('PASS: all 157 choices can complete; retired gender saves retain other selections.');
