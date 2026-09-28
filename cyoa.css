@@ -1047,3 +1047,12 @@ html { scroll-padding-top: 11rem; }
   #result-notes li { font-size: .95rem; }
   .submission-note { padding: 1rem; }
 }
+
+/* Immediate, original story feedback for the two decision scenes. */
+.scene-feedback { margin: 0 0 1.2rem; padding: 1.05rem 1.2rem; border-left: 2px solid var(--wine); background: #231d28; }
+.scene-feedback span { display: block; margin-bottom: .4rem; color: #c7adb9; font-size: .85rem; }
+.scene-feedback p { margin: 0; color: #e0dce1; font-size: 1.05rem; line-height: 1.7; }
+@media (max-width: 720px) {
+  .scene-feedback { padding: .9rem 1rem; }
+  .scene-feedback p { font-size: 1rem; }
+}

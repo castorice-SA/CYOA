@@ -73,7 +73,8 @@
   }
 
   function meetsRequirement(choice) {
-    return !choice.requiresAll || choice.requiresAll.every(isSelected);
+    return (!choice.requiresAll || choice.requiresAll.every(isSelected)) &&
+      (!choice.requiresAny || choice.requiresAny.some(isSelected));
   }
 
   function refundableIds(section, incomingChoice) {
@@ -172,6 +173,7 @@
             </div>
             <span class="section-rule">${section.rule}</span>
           </div>
+          ${['reaction', 'friction', 'terms'].includes(section.id) ? '<div class="scene-feedback" role="status" aria-live="polite" hidden><span>기록에 남은 선택</span><p></p></div>' : ''}
           <div class="choice-grid"></div>
         `;
 
@@ -192,6 +194,12 @@
     }
 
     sections.forEach(section => {
+      const feedback = document.querySelector(`[data-section="${section.id}"] .scene-feedback`);
+      if (feedback) {
+        const selected = selectedInSection(section.id)[0];
+        feedback.hidden = !selected;
+        feedback.querySelector('p').textContent = selected?.summary || '';
+      }
       section.choices.forEach(choice => {
         const card = document.querySelector(`[data-choice="${choice.id}"]`);
         const selected = isSelected(choice.id);
@@ -283,9 +291,12 @@
     return [
       `${chosen('background').summary} ${chosen('career').summary}`,
       chosen('incident').summary,
+      chosen('reaction').summary,
       chosen('origin').summary,
       contact.body,
       `조사 1팀은 ${quoted('traits')} 같은 태도와 ${quoted('mystery')} 능력에 주목했어요. 당신은 할 수 있는 일과 동료의 도움이 필요한 지점을 함께 설명했어요.`,
+      chosen('friction').summary,
+      chosen('terms').summary,
       reason.body,
       principle.body,
       `동료들에게 힘을 쓴 뒤 겪는 어려움도 미리 알렸어요. ${chosen('price').body.split('\n\n')[0]}`,
@@ -410,7 +421,7 @@
       }
 
       sanitizeSelections();
-      const missingNewChapters = ['age', 'gender', 'background', 'principle'].filter(id => !selectedInSection(id).length);
+      const missingNewChapters = ['age', 'gender', 'background', 'reaction', 'friction', 'terms', 'principle'].filter(id => !selectedInSection(id).length);
       if (needsGenderUpdate || (state.selected.size && (legacySave || missingNewChapters.length))) {
         const notice = document.querySelector('#migration-notice');
         notice.hidden = false;
@@ -452,10 +463,13 @@
       principle: '현장에서는 동료와 의견이 다를 수도 있어요. 그때도 지키고 싶은 원칙은 무엇인가요?',
       career: '연구청에 오기 전에는 어떤 일을 했나요? 그때 익힌 기술과 일하는 방식도 조사 1팀에 가져와요.',
       incident: '이상현상은 어떻게 당신의 일상에 들어왔나요? 연구청과 얽히게 된 사건을 골라 보세요.',
+      reaction: '사건이 지나간 뒤에도 해야 할 일이 남았어요. 힘의 정체를 알기 전에 당신이 먼저 한 일은 무엇이었나요? 사건에 따라 가능한 행동이 달라요.',
       origin: '당신의 힘은 어디에서 왔나요? 사건 이전부터 지녔을 수도, 그날 처음 드러났을 수도 있어요.',
       traits: '사건을 겪는 동안 당신은 무엇을 보고 어떻게 행동했나요? 그때 드러난 성향을 두 가지 골라 보세요.',
+      friction: '잘하는 일과는 별개로, 함께 일할 때 어려울 수 있는 점도 있어요. 동료에게 어떤 습관을 미리 말해 두고 싶나요?',
       mystery: '조사 1팀은 당신의 힘이 현장에서 어디에 쓰일지 알고 싶어 해요. 능력과 그 한계를 함께 살펴보고 골라 보세요.',
       companion: '조사 1팀과는 어디서 처음 만나거나 연락을 주고받았나요? 그 경위를 골라 보세요.',
+      terms: '연구청과의 대화 끝에 함께 일해 보자는 제안이 나왔어요. 바로 대답하기보다 한 가지는 확인하고 싶었어요. 무엇을 물었나요?',
       relationship: '조사 1팀에서 함께 일하자는 제안을 받았어요. 당신이 받아들인 이유는 무엇인가요?',
       equipment: '연구청에 처음 출근한 날이에요. ID 카드를 받고 앞으로 조사에 사용할 전용 보급품을 고를 차례예요. 자신의 능력과 조사 방식에 맞는 물품을 선택해 주세요.',
       price: '힘을 쓴 뒤 겪는 어려움도 동료에게 알려야 해요. 당신이 감당하는 대가를 골라 보세요.'
