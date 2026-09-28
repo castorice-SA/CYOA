@@ -18,6 +18,7 @@
   });
 
   const state = { selected: new Set(), chapter: 0 };
+  const isPhone = () => typeof window.matchMedia === "function" && window.matchMedia("(max-width: 720px)").matches;
 
   const els = {
     sections: document.querySelector("#choice-sections"),
@@ -464,6 +465,7 @@
 
   function goToChapter(index) {
     state.chapter = Math.max(0, Math.min(sections.length - 1, index));
+    if (isPhone()) document.querySelector("#world-guide-details").open = false;
     renderChapter();
     const scene = document.querySelector('#scene-intro');
     scene.focus({ preventScroll: true });
@@ -505,6 +507,10 @@
       else button.removeAttribute('aria-current');
       document.querySelector(`[data-section="${chapter.id}"]`).hidden = index !== state.chapter;
     });
+    if (isPhone()) {
+      const active = nav.children[state.chapter];
+      nav.scrollLeft = active.getBoundingClientRect().left - nav.getBoundingClientRect().left + nav.scrollLeft - (nav.clientWidth - active.clientWidth) / 2;
+    }
     document.querySelector('#scene-number').textContent = `CHAPTER ${section.number} / ${String(sections.length).padStart(2, "0")}`;
     document.querySelector('#scene-title').textContent = section.title;
     document.querySelector('#scene-text').textContent = sceneText(section.id);
@@ -533,6 +539,7 @@
   document.querySelector("#copy-report").addEventListener("click", copyReport);
   if (els.copyResult) els.copyResult.addEventListener("click", copyReport);
 
+  if (isPhone()) document.querySelector("#world-guide-details").open = false;
   restore();
   render();
 })();
