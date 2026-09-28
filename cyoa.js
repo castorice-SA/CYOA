@@ -564,7 +564,6 @@
     document.querySelector('#scene-text').textContent = sceneText(section.id);
     document.querySelector('#scene-art').style.backgroundImage = `url("assets/${sceneArtwork[section.id]}")`;
     document.querySelector('#scene-note-text').textContent = window.CYOA_WORLD.fieldNotes[section.id];
-    document.querySelector('#scene-source').hidden = !sceneArtwork[section.id].startsWith('reference/');
     document.querySelector('#chapter-prev').disabled = state.chapter === 0;
     const last = state.chapter === sections.length - 1;
     document.querySelector('#chapter-next').textContent = last ? '합류 기록 보기' : '다음 장면';

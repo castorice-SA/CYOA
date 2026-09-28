@@ -23,7 +23,7 @@
 
 ## 참고 사이트에서 가져온 장면
 
-| 이 사이트 파일 | 원본 주소 | 배치 |
+| 이 사이트 파일 | 참고 사이트 이미지 URL | 배치 |
 | --- | --- | --- |
 | `reference/source-office.webp` | [R60C15.webp](https://stalight774.neocities.org/detectives_XXX/images/R60C15.webp) | 나이·성별 장면 |
 | `reference/source-window.webp` | [R60C16.webp](https://stalight774.neocities.org/detectives_XXX/images/R60C16.webp) | 살아온 자리 장면 |
