@@ -1,6 +1,8 @@
 # 삽화 제작 기록
 
-이 사이트의 `assets/scenes/`와 `assets/origins/` 그림 10장은 내장 ImageGen으로 새로 제작한 원본 삽화입니다. [참고 CYOA](https://stalight774.neocities.org/detectives_XXX/)의 이미지나 설명 문장을 그대로 옮기지 않았습니다. 참고 사이트에 게시된 그림에는 AI 생성물과 외부 출처 이미지가 혼재한다고 안내되어 있어, 공개 페이지에 재사용하지 않았습니다.
+이 사이트의 `assets/scenes/`와 `assets/origins/` 그림 10장은 내장 ImageGen으로 새로 제작한 원본 삽화입니다. 선택지 설명은 [참고 CYOA](https://stalight774.neocities.org/detectives_XXX/)의 설정과 구성을 참고해 새로 썼습니다.
+
+`assets/reference/` 그림 3장은 위 참고 CYOA에서 가져온 장면 이미지입니다. 해당 사이트는 그림에 AI 생성물과 외부 출처 이미지가 섞여 있다고 안내하며, 각 이미지의 개별 출처와 이용 조건은 표시하지 않습니다. 출처를 페이지에 연결했으며, 이 그림들의 권리 상태는 확인되지 않았습니다.
 
 공통 프롬프트 조건: 어두운 숯색·보랏빛·절제된 호박색의 영화적 디지털 페인팅, 글자·로고·워터마크·기존 작품 복제 없음. 웹용 JPEG로 변환했습니다.
 
@@ -18,3 +20,11 @@
 | `origins/vein.jpg` | 오래된 석재 바닥의 갈라진 틈을 따라 흐르는 미세한 보랏빛 선과 측정 도구. 장소에 좌우되는 성맥. |
 
 프롬프트는 모두 독립된 장면 이미지 생성 요청이었고, 원본 PNG는 ImageGen 생성 폴더에 보존했습니다. 사이트에는 용량을 줄인 JPEG만 배포합니다.
+
+## 참고 사이트에서 가져온 장면
+
+| 이 사이트 파일 | 원본 주소 | 배치 |
+| --- | --- | --- |
+| `reference/source-office.webp` | [R60C15.webp](https://stalight774.neocities.org/detectives_XXX/images/R60C15.webp) | 나이·성별 장면 |
+| `reference/source-window.webp` | [R60C16.webp](https://stalight774.neocities.org/detectives_XXX/images/R60C16.webp) | 살아온 자리 장면 |
+| `reference/source-corridor.webp` | [R60C17.webp](https://stalight774.neocities.org/detectives_XXX/images/R60C17.webp) | 조사 1팀과의 첫 만남 장면 |

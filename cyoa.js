@@ -7,11 +7,14 @@
 
   const sections = window.CYOA_DATA;
   const sceneArtwork = {
-    age: 'erac-office', gender: 'erac-office', background: 'erac-office', career: 'erac-office',
-    incident: 'indoor-rain', reaction: 'indoor-rain',
-    origin: 'resonance-lab', traits: 'resonance-lab', friction: 'resonance-lab', mystery: 'resonance-lab',
-    companion: 'interview-room', terms: 'interview-room', relationship: 'interview-room', principle: 'interview-room',
-    equipment: 'first-day-equipment', price: 'first-day-equipment'
+    age: 'reference/source-office.webp', gender: 'reference/source-office.webp',
+    background: 'reference/source-window.webp', career: 'scenes/erac-office.jpg',
+    incident: 'scenes/indoor-rain.jpg', reaction: 'scenes/indoor-rain.jpg',
+    origin: 'scenes/resonance-lab.jpg', traits: 'scenes/resonance-lab.jpg',
+    friction: 'scenes/resonance-lab.jpg', mystery: 'scenes/resonance-lab.jpg',
+    companion: 'reference/source-corridor.webp', terms: 'scenes/interview-room.jpg',
+    relationship: 'scenes/interview-room.jpg', principle: 'scenes/interview-room.jpg',
+    equipment: 'scenes/first-day-equipment.jpg', price: 'scenes/first-day-equipment.jpg'
   };
   const originArtwork = {
     origin_inheritor: 'inheritor', origin_awakened: 'awakened', origin_contract: 'contract',
@@ -559,8 +562,9 @@
     document.querySelector('#scene-number').textContent = `CHAPTER ${section.number} / ${String(sections.length).padStart(2, "0")}`;
     document.querySelector('#scene-title').textContent = section.title;
     document.querySelector('#scene-text').textContent = sceneText(section.id);
-    document.querySelector('#scene-art').style.backgroundImage = `url("assets/scenes/${sceneArtwork[section.id]}.jpg")`;
+    document.querySelector('#scene-art').style.backgroundImage = `url("assets/${sceneArtwork[section.id]}")`;
     document.querySelector('#scene-note-text').textContent = window.CYOA_WORLD.fieldNotes[section.id];
+    document.querySelector('#scene-source').hidden = !sceneArtwork[section.id].startsWith('reference/');
     document.querySelector('#chapter-prev').disabled = state.chapter === 0;
     const last = state.chapter === sections.length - 1;
     document.querySelector('#chapter-next').textContent = last ? '합류 기록 보기' : '다음 장면';
