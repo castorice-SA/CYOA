@@ -6,6 +6,24 @@
   const BASE_POINTS = 8;
 
   const sections = window.CYOA_DATA;
+  const sceneArtwork = {
+    age: 'erac-office', gender: 'erac-office', background: 'erac-office', career: 'erac-office',
+    incident: 'indoor-rain', reaction: 'indoor-rain',
+    origin: 'resonance-lab', traits: 'resonance-lab', friction: 'resonance-lab', mystery: 'resonance-lab',
+    companion: 'interview-room', terms: 'interview-room', relationship: 'interview-room', principle: 'interview-room',
+    equipment: 'first-day-equipment', price: 'first-day-equipment'
+  };
+  const originArtwork = {
+    origin_inheritor: 'inheritor', origin_awakened: 'awakened', origin_contract: 'contract',
+    origin_otherworld: 'otherworld', origin_vein: 'vein'
+  };
+  const originExamples = {
+    origin_inheritor: '예를 들어, 선대가 남긴 봉인법은 사용할 수 있어도 왜 마지막 절차를 금했는지는 모를 수 있어요. 기록과 실제 결과를 대조하며 자신의 사용 기준을 세워야 해요.',
+    origin_awakened: '예를 들어, 누군가를 지키려던 마음이 방어의 형태로 나타날 수 있어요. 마음이 달라질 때 힘도 변하는지 아직 알 수 없으므로 처음의 모습만으로 단정하지 않아요.',
+    origin_contract: '예를 들어, 계약서에는 힘을 빌리는 시간이 적혀 있어도 그 대가가 언제 치러지는지는 모호할 수 있어요. 약속의 빈칸을 확인하는 일이 능력 훈련만큼 중요해요.',
+    origin_otherworld: '예를 들어, 당신에게 당연한 거리 감각이 이 세계의 지도와 어긋날 수 있어요. 그 차이는 단서가 되지만, 동료에게 경로를 설명할 때는 서로 기준을 맞춰야 해요.',
+    origin_vein: '예를 들어, 같은 술식도 오래된 석조 건물에서는 안정되고 훼손된 터에서는 흔들릴 수 있어요. 현장에 들어가기 전 장소의 상태를 살피는 습관이 필요해요.'
+  };
   document.querySelector('#chapter-total').textContent = String(sections.length);
   document.querySelector('#choice-total').textContent = String(sections.reduce((count, section) => count + section.choices.length, 0));
 
@@ -181,6 +199,19 @@
         section.choices.forEach(choice => {
           const card = els.template.content.firstElementChild.cloneNode(true);
           card.dataset.choice = choice.id;
+          if (section.id === 'origin') {
+            const art = document.createElement('img');
+            art.className = 'choice-card-art';
+            art.src = `assets/origins/${originArtwork[choice.id]}.jpg`;
+            art.alt = '';
+            art.loading = 'lazy';
+            art.decoding = 'async';
+            card.prepend(art);
+            const example = document.createElement('span');
+            example.className = 'choice-example';
+            example.textContent = `사례 · ${originExamples[choice.id]}`;
+            card.querySelector('.choice-body').after(example);
+          }
           card.querySelector(".choice-code").textContent = choice.code;
           card.querySelector(".choice-title").textContent = choice.title;
           card.querySelector(".choice-body").textContent = choice.body;
@@ -528,6 +559,8 @@
     document.querySelector('#scene-number').textContent = `CHAPTER ${section.number} / ${String(sections.length).padStart(2, "0")}`;
     document.querySelector('#scene-title').textContent = section.title;
     document.querySelector('#scene-text').textContent = sceneText(section.id);
+    document.querySelector('#scene-art').style.backgroundImage = `url("assets/scenes/${sceneArtwork[section.id]}.jpg")`;
+    document.querySelector('#scene-note-text').textContent = window.CYOA_WORLD.fieldNotes[section.id];
     document.querySelector('#chapter-prev').disabled = state.chapter === 0;
     const last = state.chapter === sections.length - 1;
     document.querySelector('#chapter-next').textContent = last ? '합류 기록 보기' : '다음 장면';
